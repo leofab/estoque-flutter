@@ -1,6 +1,7 @@
 import './models/produto.dart';
 
-const MOCK_PRODUTOS_DATA = const [
+// ignore: constant_identifier_names
+const MOCK_PRODUTOS_DATA = [
   Produto(
     id: 'p1',
     nome: 'Arroz',
