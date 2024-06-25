@@ -38,7 +38,22 @@ class ProdutoItem extends StatelessWidget {
 
   void selecionarProduto(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-      return const ProdutoDetalhes();
+      return ProdutoDetalhes(
+        id,
+        nome,
+        descricao,
+        imagem,
+        preco,
+        quantidade,
+        unidade,
+        categoria,
+        fornecedor,
+        data,
+        validade,
+        lote,
+        local,
+        observacao,
+      );
     }));
   }
 
