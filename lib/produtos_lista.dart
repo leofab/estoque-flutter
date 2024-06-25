@@ -17,7 +17,23 @@ class ProdutosLista extends StatelessWidget {
               mainAxisSpacing: 20,
             ),
             children: MOCK_PRODUTOS_DATA.map((produto) {
-              return ProdutoItem(produto.nome, produto.cor);
+              return ProdutoItem(
+                produto.nome,
+                produto.cor,
+                produto.id,
+                produto.descricao,
+                produto.imagem,
+                produto.preco,
+                produto.quantidade,
+                produto.unidade,
+                produto.categoria,
+                produto.fornecedor,
+                produto.data,
+                produto.validade,
+                produto.lote,
+                produto.local,
+                produto.observacao,
+              );
             }).toList()));
   }
 }
