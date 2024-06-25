@@ -9,7 +9,15 @@ class ProdutosLista extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            "Estoque App",
+            style: TextStyle(color: Colors.amber[100]),
+          ),
+          backgroundColor: Colors.black,
+        ),
         body: GridView(
+            padding: const EdgeInsets.all(25),
             gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
               maxCrossAxisExtent: 200,
               childAspectRatio: 3 / 2,
