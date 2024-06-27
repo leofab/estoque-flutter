@@ -34,9 +34,10 @@ class ProdutosLista extends StatelessWidget {
             physics: const ScrollPhysics(),
             children: MOCK_PRODUTOS_DATA.map((produto) {
               return ProdutoItem(
-                produto.nome,
-                produto.cor,
                 produto.id,
+                produto.tipo.name,
+                produto.cor,
+                produto.nome,
                 produto.descricao,
                 produto.imagem,
                 produto.preco,

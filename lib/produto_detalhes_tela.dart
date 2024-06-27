@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ProdutoDetalhes extends StatelessWidget {
   final String id;
+  final String tipo;
   final String nome;
   final String descricao;
   final String imagem;
@@ -18,6 +19,7 @@ class ProdutoDetalhes extends StatelessWidget {
 
   const ProdutoDetalhes(
       this.id,
+      this.tipo,
       this.nome,
       this.descricao,
       this.imagem,
@@ -52,6 +54,7 @@ class ProdutoDetalhes extends StatelessWidget {
               Image.network(imagem),
               Text("Descrição: $descricao",
                   style: const TextStyle(fontSize: 20)),
+              Text("Descrição: $tipo", style: const TextStyle(fontSize: 20)),
               Text("Preço: $preco", style: const TextStyle(fontSize: 20)),
               Text("Quantidade: $quantidade",
                   style: const TextStyle(fontSize: 20)),
