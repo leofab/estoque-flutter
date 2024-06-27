@@ -5,37 +5,10 @@ class ProdutoItem extends StatelessWidget {
   final String id;
   final String tipo;
   final String nome;
-  final String descricao;
-  final String imagem;
   final String preco;
   final String quantidade;
-  final String unidade;
-  final String categoria;
-  final String fornecedor;
-  final String data;
-  final String validade;
-  final String lote;
-  final String local;
-  final String observacao;
-  final Color cor;
 
-  const ProdutoItem(
-      this.nome,
-      this.tipo,
-      this.cor,
-      this.id,
-      this.descricao,
-      this.imagem,
-      this.preco,
-      this.quantidade,
-      this.unidade,
-      this.categoria,
-      this.fornecedor,
-      this.data,
-      this.validade,
-      this.lote,
-      this.local,
-      this.observacao,
+  const ProdutoItem(this.id, this.nome, this.tipo, this.preco, this.quantidade,
       {super.key});
 
   void selecionarProduto(BuildContext context) {
@@ -44,18 +17,8 @@ class ProdutoItem extends StatelessWidget {
         id,
         tipo,
         nome,
-        descricao,
-        imagem,
         preco,
         quantidade,
-        unidade,
-        categoria,
-        fornecedor,
-        data,
-        validade,
-        lote,
-        local,
-        observacao,
       );
     }));
   }
@@ -71,8 +34,8 @@ class ProdutoItem extends StatelessWidget {
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              cor.withOpacity(0.7),
-              cor,
+              Colors.amber.withOpacity(0.7),
+              const Color(0xFFFFD54F),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -90,7 +53,7 @@ class ProdutoItem extends StatelessWidget {
               ),
             ),
             Text(
-              data,
+              quantidade,
               style: const TextStyle(
                 fontSize: 16,
               ),

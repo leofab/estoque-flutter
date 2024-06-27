@@ -40,7 +40,6 @@ class Produto {
   final String lote;
   final String local;
   final String observacao;
-  final Color cor;
 
   const Produto({
     required this.id,
@@ -58,6 +57,5 @@ class Produto {
     required this.lote,
     required this.local,
     required this.observacao,
-    this.cor = Colors.orange,
   });
 }

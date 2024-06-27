@@ -34,23 +34,11 @@ class ProdutosLista extends StatelessWidget {
             physics: const ScrollPhysics(),
             children: MOCK_PRODUTOS_DATA.map((produto) {
               return ProdutoItem(
-                produto.id,
-                produto.tipo.name,
-                produto.cor,
-                produto.nome,
-                produto.descricao,
-                produto.imagem,
-                produto.preco,
-                produto.quantidade,
-                produto.unidade,
-                produto.categoria,
-                produto.fornecedor,
-                produto.data,
-                produto.validade,
-                produto.lote,
-                produto.local,
-                produto.observacao,
-              );
+                  produto.id,
+                  produto.nome,
+                  produto.tipo.toString().split('.').last,
+                  produto.preco,
+                  produto.quantidade);
             }).toList()),
         floatingActionButton: FloatingActionButton(
           onPressed: () => inserirProduto(context),
