@@ -1,7 +1,32 @@
 import 'package:flutter/material.dart';
 
+enum Tipo {
+  Absinto,
+  Amarguinha,
+  Cachaca,
+  Cerveja,
+  Champanhe,
+  Conhaque,
+  Gim,
+  Grappa,
+  Hidromel,
+  Licor,
+  Rum,
+  Saque,
+  Sidra,
+  Tequila,
+  Vermute,
+  Vinho,
+  Vodka,
+  Whisky,
+  SemAlcool,
+  Gelo,
+  Outros,
+}
+
 class Produto {
   final String id;
+  final Tipo tipo;
   final String nome;
   final String descricao;
   final String imagem;
@@ -20,6 +45,7 @@ class Produto {
   const Produto({
     required this.id,
     required this.nome,
+    required this.tipo,
     required this.descricao,
     required this.imagem,
     required this.preco,

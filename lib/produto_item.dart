@@ -3,6 +3,7 @@ import 'package:flutter_application_helder/produto_detalhes_tela.dart';
 
 class ProdutoItem extends StatelessWidget {
   final String id;
+  final String tipo;
   final String nome;
   final String descricao;
   final String imagem;
@@ -20,6 +21,7 @@ class ProdutoItem extends StatelessWidget {
 
   const ProdutoItem(
       this.nome,
+      this.tipo,
       this.cor,
       this.id,
       this.descricao,
@@ -40,6 +42,7 @@ class ProdutoItem extends StatelessWidget {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
       return ProdutoDetalhes(
         id,
+        tipo,
         nome,
         descricao,
         imagem,
@@ -80,7 +83,7 @@ class ProdutoItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              nome,
+              tipo,
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
