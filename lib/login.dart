@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
+import 'produtos_lista.dart';
+
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
+
+  void login(BuildContext context) {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
+      return const ProdutosLista();
+    }));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +85,7 @@ class LoginScreen extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(top: 30),
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () => login(context),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.only(left: 50, right: 50),
               shape: RoundedRectangleBorder(

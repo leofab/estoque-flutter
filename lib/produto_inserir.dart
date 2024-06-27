@@ -65,7 +65,6 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                     decoration: const InputDecoration(labelText: "Observação"),
                   ),
                   ElevatedButton(
-                    iconAlignment: IconAlignment.end,
                     onPressed: () {
                       if (key.currentState!.validate()) {
                         Navigator.of(context).pop();
