@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Filtrar extends StatefulWidget {
-  const Filtrar({super.key});
+  final Function update;
+  Filtrar({super.key, required this.update});
 
   @override
   State<Filtrar> createState() => _FiltrarState();

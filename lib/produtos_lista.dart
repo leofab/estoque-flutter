@@ -30,8 +30,22 @@ class _ProdutosListaState extends State<ProdutosLista> {
 
   void filtrarProdutos(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-      return const Filtrar();
+      return Filtrar(update: _update);
     }));
+  }
+
+  void _update() {
+    setState(() {
+      produtos = MOCK_PRODUTOS_DATA
+          .map((produto) => ProdutoItem(
+                produto.id,
+                produto.nome,
+                produto.nome,
+                produto.preco,
+                produto.quantidade,
+              ))
+          .toList();
+    });
   }
 
   @override
