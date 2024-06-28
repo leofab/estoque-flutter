@@ -37,44 +37,45 @@ class _ProdutosListaState extends State<ProdutosLista> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text(
-            "Estoque App",
-            style: TextStyle(color: Colors.amber[100]),
-          ),
-          backgroundColor: Colors.black,
+      appBar: AppBar(
+        title: Text(
+          "Estoque App",
+          style: TextStyle(color: Colors.amber[100]),
         ),
-        body: GridView(
-          padding: const EdgeInsets.all(25),
-          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 200,
-            childAspectRatio: 3 / 2,
-            crossAxisSpacing: 20,
-            mainAxisSpacing: 20,
-          ),
-          physics: const ScrollPhysics(),
-          children: produtos,
+        backgroundColor: Colors.black,
+      ),
+      body: GridView(
+        padding: const EdgeInsets.all(25),
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 200,
+          childAspectRatio: 3 / 2,
+          crossAxisSpacing: 20,
+          mainAxisSpacing: 20,
         ),
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              FloatingActionButton.extended(
-                label: const Text("Filtrar"),
-                onPressed: () => filtrarProdutos(context),
-                backgroundColor: Colors.amber[300],
-                splashColor: Colors.amber[100],
-                icon: const Icon(Icons.filter_alt),
-              ),
-              FloatingActionButton(
-                onPressed: () => inserirProduto(context),
-                backgroundColor: Colors.amber[300],
-                splashColor: Colors.amber[100],
-                child: const Icon(Icons.add),
-              ),
-            ],
-          ),
-        ));
+        physics: const ScrollPhysics(),
+        children: produtos,
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            FloatingActionButton.extended(
+              label: const Text("Filtrar"),
+              onPressed: () => filtrarProdutos(context),
+              backgroundColor: Colors.amber[300],
+              splashColor: Colors.amber[100],
+              icon: const Icon(Icons.filter_alt),
+            ),
+            FloatingActionButton(
+              onPressed: () => inserirProduto(context),
+              backgroundColor: Colors.amber[300],
+              splashColor: Colors.amber[100],
+              child: const Icon(Icons.add),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
