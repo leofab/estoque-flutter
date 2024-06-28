@@ -22,6 +22,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
             produto.quantidade,
           ))
       .toList();
+
   void inserirProduto(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
       return const ProdutoInserir();
@@ -30,21 +31,13 @@ class _ProdutosListaState extends State<ProdutosLista> {
 
   void filtrarProdutos(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-      return Filtrar(update: _update);
+      return Filtrar(update: _update, produtos: produtos);
     }));
   }
 
-  void _update() {
+  void _update(List<ProdutoItem> newProdutos) {
     setState(() {
-      produtos = MOCK_PRODUTOS_DATA
-          .map((produto) => ProdutoItem(
-                produto.id,
-                produto.nome,
-                produto.nome,
-                produto.preco,
-                produto.quantidade,
-              ))
-          .toList();
+      produtos = newProdutos;
     });
   }
 

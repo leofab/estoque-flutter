@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'produto_item.dart';
+import 'mock_produtos_data.dart';
+import 'produto_item.dart';
+
 class Filtrar extends StatefulWidget {
-  final Function update;
-  const Filtrar({super.key, required this.update});
+  final List<ProdutoItem> produtos;
+  final Function(List<ProdutoItem>) update;
+  const Filtrar({super.key, required this.update, required this.produtos});
 
   @override
   State<Filtrar> createState() => _FiltrarState();
@@ -26,7 +31,7 @@ class _FiltrarState extends State<Filtrar> {
     super.dispose();
   }
 
-  final List produtos = [];
+  List produtos = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,29 +49,18 @@ class _FiltrarState extends State<Filtrar> {
               child: Column(
                 children: [
                   TextFormField(
-                    decoration: const InputDecoration(labelText: "Nome"),
-                    controller: myControllerNome,
-                  ),
-                  TextFormField(
                     decoration: const InputDecoration(labelText: "Tipo"),
                     controller: myControllerTipo,
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Categoria"),
-                    controller: myControllerCategoria,
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Fornecedor"),
-                    controller: myControllerFornecedor,
-                  ),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Lote"),
-                    controller: myControllerLote,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        widget.update(produtos = ProtudoItem(MOCK_PRODUTOS_DATA
+                            .where((produto) =>
+                                produto.tipo == myControllerTipo.text)
+                            .toList()));
+                      },
                       child: const Text("Filtrar"),
                     ),
                   ),
