@@ -3,13 +3,34 @@ import 'package:flutter/material.dart';
 import 'mock_produtos_data.dart';
 import 'produto_item.dart';
 import 'produto_inserir.dart';
+import 'filtrar.dart';
 
-class ProdutosLista extends StatelessWidget {
+class ProdutosLista extends StatefulWidget {
   const ProdutosLista({super.key});
 
+  @override
+  State<ProdutosLista> createState() => _ProdutosListaState();
+}
+
+class _ProdutosListaState extends State<ProdutosLista> {
+  List<ProdutoItem> produtos = MOCK_PRODUTOS_DATA
+      .map((produto) => ProdutoItem(
+            produto.id,
+            produto.nome,
+            produto.nome,
+            produto.preco,
+            produto.quantidade,
+          ))
+      .toList();
   void inserirProduto(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
       return const ProdutoInserir();
+    }));
+  }
+
+  void filtrarProdutos(BuildContext context) {
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+      return const Filtrar();
     }));
   }
 
@@ -24,22 +45,16 @@ class ProdutosLista extends StatelessWidget {
           backgroundColor: Colors.black,
         ),
         body: GridView(
-            padding: const EdgeInsets.all(25),
-            gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: 200,
-              childAspectRatio: 3 / 2,
-              crossAxisSpacing: 20,
-              mainAxisSpacing: 20,
-            ),
-            physics: const ScrollPhysics(),
-            children: MOCK_PRODUTOS_DATA.map((produto) {
-              return ProdutoItem(
-                  produto.id,
-                  produto.nome,
-                  produto.tipo.toString().split('.').last,
-                  produto.preco,
-                  produto.quantidade);
-            }).toList()),
+          padding: const EdgeInsets.all(25),
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 200,
+            childAspectRatio: 3 / 2,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20,
+          ),
+          physics: const ScrollPhysics(),
+          children: produtos,
+        ),
         floatingActionButton: Padding(
           padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 0),
           child: Column(
@@ -47,7 +62,7 @@ class ProdutosLista extends StatelessWidget {
             children: [
               FloatingActionButton.extended(
                 label: const Text("Filtrar"),
-                onPressed: () {},
+                onPressed: () => filtrarProdutos(context),
                 backgroundColor: Colors.amber[300],
                 splashColor: Colors.amber[100],
                 icon: const Icon(Icons.filter_alt),
