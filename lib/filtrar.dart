@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Filtrar extends StatefulWidget {
   final Function update;
-  Filtrar({super.key, required this.update});
+  const Filtrar({super.key, required this.update});
 
   @override
   State<Filtrar> createState() => _FiltrarState();
@@ -10,6 +10,7 @@ class Filtrar extends StatefulWidget {
 
 class _FiltrarState extends State<Filtrar> {
   final key = GlobalKey<FormState>();
+  final List produtos = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
