@@ -10,6 +10,22 @@ class Filtrar extends StatefulWidget {
 
 class _FiltrarState extends State<Filtrar> {
   final key = GlobalKey<FormState>();
+  final myControllerNome = TextEditingController();
+  final myControllerTipo = TextEditingController();
+  final myControllerCategoria = TextEditingController();
+  final myControllerFornecedor = TextEditingController();
+  final myControllerLote = TextEditingController();
+
+  @override
+  void dispose() {
+    myControllerNome.dispose();
+    myControllerTipo.dispose();
+    myControllerCategoria.dispose();
+    myControllerFornecedor.dispose();
+    myControllerLote.dispose();
+    super.dispose();
+  }
+
   final List produtos = [];
   @override
   Widget build(BuildContext context) {
@@ -29,18 +45,23 @@ class _FiltrarState extends State<Filtrar> {
                 children: [
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Nome"),
+                    controller: myControllerNome,
                   ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Tipo"),
+                    controller: myControllerTipo,
                   ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Categoria"),
+                    controller: myControllerCategoria,
                   ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Fornecedor"),
+                    controller: myControllerFornecedor,
                   ),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Lote"),
+                    controller: myControllerLote,
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 16),
