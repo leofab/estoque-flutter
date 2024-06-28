@@ -46,7 +46,7 @@ class ProdutoItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              tipo,
+              nome,
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,

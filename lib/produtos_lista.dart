@@ -40,11 +40,26 @@ class ProdutosLista extends StatelessWidget {
                   produto.preco,
                   produto.quantidade);
             }).toList()),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => inserirProduto(context),
-          backgroundColor: Colors.amber[300],
-          splashColor: Colors.amber[100],
-          child: const Icon(Icons.add),
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              FloatingActionButton.extended(
+                label: const Text("Filtrar"),
+                onPressed: () {},
+                backgroundColor: Colors.amber[300],
+                splashColor: Colors.amber[100],
+                icon: const Icon(Icons.filter_alt),
+              ),
+              FloatingActionButton(
+                onPressed: () => inserirProduto(context),
+                backgroundColor: Colors.amber[300],
+                splashColor: Colors.amber[100],
+                child: const Icon(Icons.add),
+              ),
+            ],
+          ),
         ));
   }
 }
