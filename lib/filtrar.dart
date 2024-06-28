@@ -56,9 +56,11 @@ class _FiltrarState extends State<Filtrar> {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: ElevatedButton(
                       onPressed: () {
-                        widget.update(produtos = ProtudoItem(MOCK_PRODUTOS_DATA
+                        widget.update(produtos = (MOCK_PRODUTOS_DATA
                             .where((produto) =>
-                                produto.tipo == myControllerTipo.text)
+                                produto.tipo.name == myControllerTipo.text)
+                            .map((p) => ProdutoItem(p.id, p.nome, p.tipo.name,
+                                p.preco, p.quantidade))
                             .toList()));
                       },
                       child: const Text("Filtrar"),
