@@ -73,16 +73,8 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
     showDialog(
       context: context,
       builder: (context) {
-        return AlertDialog(
-          title: const Text("Produto inserido com sucesso!"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("OK"),
-            ),
-          ],
+        return const AlertDialog(
+          title: Text("Produto inserido com sucesso!"),
         );
       },
     );
@@ -138,16 +130,22 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Preço"),
                     controller: myControllerPreco,
+                    validator: (value) =>
+                        value!.isEmpty ? "Campo obrigatório" : null,
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Quantidade"),
                     controller: myControllerQuantidade,
+                    validator: (value) =>
+                        value!.isEmpty ? "Campo obrigatório" : null,
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Unidade"),
                     controller: myControllerUnidade,
+                    validator: (value) =>
+                        value!.isEmpty ? "Campo obrigatório" : null,
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
@@ -191,6 +189,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
           ElevatedButton(
             onPressed: () {
               if (key.currentState!.validate()) {
+                Navigator.of(context).pop();
                 alerta(context);
               }
             },
