@@ -103,6 +103,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
             child: Form(
               key: key,
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Nome"),
@@ -110,6 +111,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                     validator: (value) =>
                         value!.isEmpty ? "Campo obrigatório" : null,
                   ),
+                  const SizedBox(height: 20),
                   DropdownMenu<Tipos>(
                     initialSelection: Tipos.absinto,
                     controller: myControllerTipo,
@@ -132,58 +134,69 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                       );
                     }).toList(),
                   ),
+                  const SizedBox(height: 10),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Preço"),
                     controller: myControllerPreco,
                   ),
+                  const SizedBox(height: 10),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Quantidade"),
                     controller: myControllerQuantidade,
                   ),
+                  const SizedBox(height: 10),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Unidade"),
                     controller: myControllerUnidade,
                   ),
+                  const SizedBox(height: 10),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Categoria"),
                     controller: myControllerCategoria,
                   ),
+                  const SizedBox(height: 10),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Fornecedor"),
                     controller: myControllerFornecedor,
                   ),
+                  const SizedBox(height: 10),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Data"),
                     controller: myControllerData,
                   ),
+                  const SizedBox(height: 10),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Validade"),
                     controller: myControllerValidade,
                   ),
+                  const SizedBox(height: 10),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Lote"),
                     controller: myControllerLote,
                   ),
+                  const SizedBox(height: 10),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Local"),
                     controller: myControllerLocal,
                   ),
+                  const SizedBox(height: 10),
                   TextFormField(
                     decoration: const InputDecoration(labelText: "Observação"),
                     controller: myControllerObservacao,
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (key.currentState!.validate()) {
-                        alerta(context);
-                      }
-                    },
-                    child: const Text("Inserir"),
-                  )
                 ],
               ),
             ),
           ),
+          ElevatedButton(
+            onPressed: () {
+              if (key.currentState!.validate()) {
+                alerta(context);
+              }
+            },
+            child: const Text("Inserir"),
+          ),
+          const SizedBox(height: 10),
         ],
       ),
     );
