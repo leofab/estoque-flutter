@@ -104,14 +104,3 @@ class _ProdutosListaState extends State<ProdutosLista> {
     );
   }
 }
-
-// ,
-            // ElevatedButton(
-            //   onPressed: () {
-            //     _update(produtos = MOCK_PRODUTOS_DATA
-            //         .map((p) => ProdutoItem(
-            //             p.id, p.nome, p.tipo.name, p.preco, p.quantidade))
-            //         .toList());
-            //   },
-            //   child: const Text("Limpar Filtros"),
-            // )
