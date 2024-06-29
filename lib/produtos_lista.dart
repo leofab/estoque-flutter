@@ -63,7 +63,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
         children: produtos,
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 0),
+        padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -79,12 +79,39 @@ class _ProdutosListaState extends State<ProdutosLista> {
               onPressed: () => inserirProduto(context),
               backgroundColor: Colors.amber[300],
               splashColor: Colors.amber[100],
-              child: const Icon(Icons.add),
               heroTag: null,
+              child: const Icon(Icons.add),
             ),
           ],
         ),
       ),
+      persistentFooterButtons: [
+        ElevatedButton(
+          onPressed: () {
+            _update(MOCK_PRODUTOS_DATA
+                .map((produto) => ProdutoItem(
+                      produto.id,
+                      produto.nome,
+                      produto.nome,
+                      produto.preco,
+                      produto.quantidade,
+                    ))
+                .toList());
+          },
+          child: const Text("Limpar Filtros"),
+        ),
+      ],
     );
   }
 }
+
+// ,
+            // ElevatedButton(
+            //   onPressed: () {
+            //     _update(produtos = MOCK_PRODUTOS_DATA
+            //         .map((p) => ProdutoItem(
+            //             p.id, p.nome, p.tipo.name, p.preco, p.quantidade))
+            //         .toList());
+            //   },
+            //   child: const Text("Limpar Filtros"),
+            // )

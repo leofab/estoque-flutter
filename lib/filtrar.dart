@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'produto_item.dart';
 import 'mock_produtos_data.dart';
-import 'produto_item.dart';
 
 class Filtrar extends StatefulWidget {
   final List<ProdutoItem> produtos;
@@ -29,6 +28,10 @@ class _FiltrarState extends State<Filtrar> {
     myControllerFornecedor.dispose();
     myControllerLote.dispose();
     super.dispose();
+  }
+
+  void retornar(BuildContext context) {
+    Navigator.of(context).pop();
   }
 
   List produtos = [];
@@ -62,6 +65,7 @@ class _FiltrarState extends State<Filtrar> {
                             .map((p) => ProdutoItem(p.id, p.nome, p.tipo.name,
                                 p.preco, p.quantidade))
                             .toList()));
+                        retornar(context);
                       },
                       child: const Text("Filtrar"),
                     ),
