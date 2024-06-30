@@ -25,7 +25,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
 
   void inserirProduto(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-      return const ProdutoInserir();
+      return ProdutoInserir(update: _update, produtos: produtos);
     }));
   }
 

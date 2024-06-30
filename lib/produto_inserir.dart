@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
+import './models/produto.dart';
+import 'produto_item.dart';
+import 'mock_produtos_data.dart';
+
 class ProdutoInserir extends StatefulWidget {
-  const ProdutoInserir({super.key});
+  final List<ProdutoItem> produtos;
+  final Function(List<ProdutoItem>) update;
+  const ProdutoInserir(
+      {super.key, required this.update, required this.produtos});
 
   @override
   State<ProdutoInserir> createState() => _ProdutoInserirState();
@@ -189,6 +196,33 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
           ElevatedButton(
             onPressed: () {
               if (key.currentState!.validate()) {
+                Produto produto = Produto(
+                  id: DateTime.now().toString(),
+                  tipo: myControllerTipo.text,
+                  nome: myControllerNome.text,
+                  descricao: myControllerDescricao.text,
+                  preco: myControllerPreco.text,
+                  quantidade: myControllerQuantidade.text,
+                  unidade: myControllerUnidade.text,
+                  categoria: myControllerCategoria.text,
+                  fornecedor: myControllerFornecedor.text,
+                  data: myControllerData.text,
+                  validade: myControllerValidade.text,
+                  lote: myControllerLote.text,
+                  local: myControllerLocal.text,
+                  observacao: myControllerObservacao.text,
+                );
+                MOCK_PRODUTOS_DATA.add(produto);
+                widget.update([
+                  ...widget.produtos,
+                  ProdutoItem(
+                    produto.id,
+                    produto.nome,
+                    produto.tipo,
+                    produto.preco,
+                    produto.quantidade,
+                  ),
+                ]);
                 Navigator.of(context).pop();
                 alerta(context);
               }

@@ -61,9 +61,9 @@ class _FiltrarState extends State<Filtrar> {
                       onPressed: () {
                         widget.update(produtos = (MOCK_PRODUTOS_DATA
                             .where((produto) =>
-                                produto.tipo.name == myControllerTipo.text)
-                            .map((p) => ProdutoItem(p.id, p.nome, p.tipo.name,
-                                p.preco, p.quantidade))
+                                produto.tipo == myControllerTipo.text)
+                            .map((p) => ProdutoItem(
+                                p.id, p.nome, p.tipo, p.preco, p.quantidade))
                             .toList()));
                         retornar(context);
                       },
