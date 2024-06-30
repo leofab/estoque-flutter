@@ -1,59 +1,65 @@
-enum Tipo {
-  Absinto,
-  Amarguinha,
-  Cachaca,
-  Cerveja,
-  Champanhe,
-  Conhaque,
-  Gim,
-  Grappa,
-  Hidromel,
-  Licor,
-  Rum,
-  Saque,
-  Sidra,
-  Tequila,
-  Vermute,
-  Vinho,
-  Vodka,
-  Whisky,
-  SemAlcool,
-  Gelo,
-  Outros,
+import 'package:flutter/material.dart';
+
+enum Tipos {
+  absinto("Absinto", Colors.green),
+  amarguinha("Amarguinha", Colors.green),
+  cachaca("Cachaça", Colors.green),
+  cerveja("Cerveja", Colors.green),
+  champanhe("Champanhe", Colors.green),
+  conhaque("Conhaque", Colors.green),
+  gim("Gim", Colors.green),
+  grappa("Grappa", Colors.green),
+  hidromel("Hidromel", Colors.green),
+  licor("Licor", Colors.green),
+  rum("Rum", Colors.green),
+  saque("Saque", Colors.green),
+  sidra("Sidra", Colors.green),
+  tequila("Tequila", Colors.green),
+  vermute("Vermute", Colors.green),
+  vinho("Vinho", Colors.green),
+  vodka("Vodka", Colors.green),
+  whisky("Whisky", Colors.green),
+  semAlcool("Sem Álcool", Colors.green),
+  gelo("Gelo", Colors.green),
+  outros("Outros", Colors.green);
+
+  const Tipos(this.tipo, this.cor);
+  final String tipo;
+  final Color cor;
 }
 
 class Produto {
-  final String id;
-  final Tipo tipo;
-  final String nome;
-  final String descricao;
-  final String imagem;
-  final String preco;
-  final String quantidade;
-  final String unidade;
-  final String categoria;
-  final String fornecedor;
-  final String data;
-  final String validade;
-  final String lote;
-  final String local;
-  final String observacao;
+  String id;
+  String tipo;
+  String nome;
+  String? descricao;
+  String? imagem;
+  String preco;
+  String quantidade;
+  String unidade;
+  String? categoria;
+  String? fornecedor;
+  String? data;
+  String? validade;
+  String? lote;
+  String? local;
+  String? observacao;
 
-  const Produto({
+  Produto({
     required this.id,
-    required this.nome,
     required this.tipo,
-    required this.descricao,
-    required this.imagem,
+    required this.nome,
+    this.descricao,
+    this.imagem,
     required this.preco,
     required this.quantidade,
     required this.unidade,
-    required this.categoria,
-    required this.fornecedor,
-    required this.data,
-    required this.validade,
-    required this.lote,
-    required this.local,
-    required this.observacao,
+    this.categoria,
+    this.fornecedor,
+    this.data,
+    this.validade,
+    this.lote,
+    this.local,
+    this.observacao,
   });
 }

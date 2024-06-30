@@ -1,10 +1,10 @@
 import './models/produto.dart';
 
 // ignore: constant_identifier_names
-const MOCK_PRODUTOS_DATA = [
+var MOCK_PRODUTOS_DATA = [
   Produto(
     id: '1',
-    tipo: Tipo.Vinho,
+    tipo: Tipos.vinho.name,
     nome: 'Vinho Sao Francisco',
     descricao: 'Vinho tinto seco',
     imagem: 'assets/images/vinho.jpg',
@@ -21,7 +21,7 @@ const MOCK_PRODUTOS_DATA = [
   ),
   Produto(
     id: '2',
-    tipo: Tipo.Cachaca,
+    tipo: Tipos.cachaca.name,
     nome: 'Cachaça Ypioca',
     descricao: 'Cachaça envelhecida',
     imagem: 'assets/images/cachaca.jpg',
@@ -38,7 +38,7 @@ const MOCK_PRODUTOS_DATA = [
   ),
   Produto(
     id: '3',
-    tipo: Tipo.Vodka,
+    tipo: Tipos.vodka.name,
     nome: 'Vodka Smirnoff',
     descricao: 'Vodka importada',
     imagem: 'assets/images/vodka.jpg',
@@ -55,7 +55,7 @@ const MOCK_PRODUTOS_DATA = [
   ),
   Produto(
     id: '4',
-    tipo: Tipo.Whisky,
+    tipo: Tipos.whisky.name,
     nome: 'Whisky Johnnie Walker',
     descricao: 'Whisky escocês',
     imagem: 'assets/images/whisky.jpg',
@@ -72,7 +72,7 @@ const MOCK_PRODUTOS_DATA = [
   ),
   Produto(
     id: '5',
-    tipo: Tipo.Cerveja,
+    tipo: Tipos.cerveja.name,
     nome: 'Cerveja Skol',
     descricao: 'Cerveja pilsen',
     imagem: 'assets/images/cerveja.jpg',
@@ -89,7 +89,7 @@ const MOCK_PRODUTOS_DATA = [
   ),
   Produto(
     id: '6',
-    tipo: Tipo.Gelo,
+    tipo: Tipos.gelo.name,
     nome: 'Gelo',
     descricao: 'Gelo em cubos',
     imagem: 'assets/images/gelo.jpg',
@@ -106,7 +106,7 @@ const MOCK_PRODUTOS_DATA = [
   ),
   Produto(
     id: '7',
-    tipo: Tipo.Outros,
+    tipo: Tipos.outros.name,
     nome: 'Amendoin',
     descricao: 'Amendoin torrado',
     imagem: 'assets/images/amendoin.jpg',
@@ -123,7 +123,7 @@ const MOCK_PRODUTOS_DATA = [
   ),
   Produto(
     id: '8',
-    tipo: Tipo.Rum,
+    tipo: Tipos.rum.name,
     nome: 'Rum Motilla',
     descricao: 'Rum envelhecido',
     imagem: 'assets/images/rum.jpg',
@@ -140,7 +140,7 @@ const MOCK_PRODUTOS_DATA = [
   ),
   Produto(
     id: '9',
-    tipo: Tipo.SemAlcool,
+    tipo: Tipos.semAlcool.name,
     nome: 'Refrigerante',
     descricao: 'Refrigerante de cola',
     imagem: 'assets/images/refrigerante.jpg',
@@ -157,7 +157,7 @@ const MOCK_PRODUTOS_DATA = [
   ),
   Produto(
     id: '10',
-    tipo: Tipo.Vinho,
+    tipo: Tipos.vinho.name,
     nome: 'Vinho Aurora',
     descricao: 'Vinho tinto suave',
     imagem: 'assets/images/vinho_branco.jpg',
@@ -174,7 +174,7 @@ const MOCK_PRODUTOS_DATA = [
   ),
   Produto(
     id: '11',
-    tipo: Tipo.Tequila,
+    tipo: Tipos.tequila.name,
     nome: 'Tequila Jose Cuervo',
     descricao: 'Tequila mexicana',
     imagem: 'assets/images/tequila.jpg',
@@ -191,7 +191,7 @@ const MOCK_PRODUTOS_DATA = [
   ),
   Produto(
     id: '12',
-    tipo: Tipo.Absinto,
+    tipo: Tipos.absinto.name,
     nome: 'Absinto',
     descricao: 'Absinto importado',
     imagem: 'assets/images/absinto.jpg',
@@ -208,7 +208,7 @@ const MOCK_PRODUTOS_DATA = [
   ),
   Produto(
     id: '13',
-    tipo: Tipo.Cerveja,
+    tipo: Tipos.cerveja.name,
     nome: 'Cerveja Heineken',
     descricao: 'Cerveja pilsen',
     imagem: 'assets/images/cerveja_heineken.jpg',
@@ -225,7 +225,7 @@ const MOCK_PRODUTOS_DATA = [
   ),
   Produto(
     id: '14',
-    tipo: Tipo.Cerveja,
+    tipo: Tipos.cerveja.name,
     nome: 'Cerveja Budweiser',
     descricao: 'Cerveja pilsen',
     imagem: 'assets/images/cerveja_budweiser.jpg',

@@ -25,7 +25,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
 
   void inserirProduto(BuildContext context) {
     Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-      return const ProdutoInserir();
+      return ProdutoInserir(update: _update, produtos: produtos);
     }));
   }
 
@@ -104,14 +104,3 @@ class _ProdutosListaState extends State<ProdutosLista> {
     );
   }
 }
-
-// ,
-            // ElevatedButton(
-            //   onPressed: () {
-            //     _update(produtos = MOCK_PRODUTOS_DATA
-            //         .map((p) => ProdutoItem(
-            //             p.id, p.nome, p.tipo.name, p.preco, p.quantidade))
-            //         .toList());
-            //   },
-            //   child: const Text("Limpar Filtros"),
-            // )
