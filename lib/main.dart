@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'login.dart';
+import 'produtos_lista.dart';
 
 void main() {
   runApp(const MainApp());
@@ -11,9 +12,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Estoque App',
-      home: LoginScreen(),
-    );
+    return MaterialApp(title: 'Estoque App', initialRoute: '/login', routes: {
+      '/login': (context) => const LoginScreen(),
+      '/produtos': (context) => const ProdutosLista(),
+    });
   }
 }

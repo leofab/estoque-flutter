@@ -59,7 +59,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
             );
           },
         ),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.black45,
       ),
       body: GridView(
         padding: const EdgeInsets.all(25),
@@ -91,7 +91,11 @@ class _ProdutosListaState extends State<ProdutosLista> {
             ListTile(
               title: const Text("Produtos"),
               onTap: () {
-                Navigator.pop(context);
+                if (ModalRoute.of(context)!.settings.name != "/produtos") {
+                  Navigator.of(context).pushReplacementNamed("/produtos");
+                } else {
+                  Navigator.pop(context);
+                }
               },
             ),
             ListTile(

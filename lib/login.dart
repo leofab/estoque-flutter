@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'produtos_lista.dart';
-
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   void login(BuildContext context) {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) {
-      return const ProdutosLista();
-    }));
+    Navigator.pushReplacementNamed(context, '/produtos');
   }
 
   @override
