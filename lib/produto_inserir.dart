@@ -47,6 +47,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
   final myControllerNome = TextEditingController();
   final myControllerTipo = TextEditingController();
   final myControllerDescricao = TextEditingController();
+  final myControllerPrecoTotal = TextEditingController();
   final myControllerPreco = TextEditingController();
   final myControllerQuantidade = TextEditingController();
   final myControllerUnidade = TextEditingController();
@@ -63,6 +64,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
     myControllerNome.dispose();
     myControllerTipo.dispose();
     myControllerDescricao.dispose();
+    myControllerPrecoTotal.dispose();
     myControllerPreco.dispose();
     myControllerQuantidade.dispose();
     myControllerUnidade.dispose();
@@ -135,6 +137,14 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                   ),
                   const SizedBox(height: 10),
                   TextFormField(
+                    decoration: const InputDecoration(
+                        labelText: "Preço de Compra Total"),
+                    controller: myControllerPrecoTotal,
+                    validator: (value) =>
+                        value!.isEmpty ? "Campo obrigatório" : null,
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
                     decoration: const InputDecoration(labelText: "Preço"),
                     controller: myControllerPreco,
                     validator: (value) =>
@@ -201,6 +211,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                   tipo: myControllerTipo.text,
                   nome: myControllerNome.text,
                   descricao: myControllerDescricao.text,
+                  valorCompraTotal: myControllerPrecoTotal.text,
                   preco: myControllerPreco.text,
                   quantidade: myControllerQuantidade.text,
                   unidade: myControllerUnidade.text,

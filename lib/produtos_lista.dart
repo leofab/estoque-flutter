@@ -105,21 +105,9 @@ class _ProdutosListaState extends State<ProdutosLista> {
               },
             ),
             ListTile(
-              title: const Text("Categorias"),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text("Unidades"),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
               title: const Text("Sair"),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pushReplacementNamed(context, '/login');
               },
             ),
           ],

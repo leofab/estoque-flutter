@@ -34,6 +34,7 @@ class Produto {
   String nome;
   String? descricao;
   String? imagem;
+  String valorCompraTotal;
   String preco;
   String quantidade;
   String unidade;
@@ -51,6 +52,7 @@ class Produto {
     required this.nome,
     this.descricao,
     this.imagem,
+    required this.valorCompraTotal,
     required this.preco,
     required this.quantidade,
     required this.unidade,
