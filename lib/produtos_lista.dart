@@ -46,7 +46,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Estoque App",
+          "Produtos",
           style: TextStyle(color: Colors.amber[100]),
         ),
         leading: Builder(
@@ -99,7 +99,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
               },
             ),
             ListTile(
-              title: const Text("Fornecedores"),
+              title: const Text("Vendas / Caixa"),
               onTap: () {
                 Navigator.pop(context);
               },
