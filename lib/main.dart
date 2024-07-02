@@ -10,6 +10,7 @@ import 'produto_vendas.dart';
 
 Future main() async {
   sqfliteFfiInit();
+  databaseFactory = databaseFactoryFfi;
   WidgetsFlutterBinding.ensureInitialized();
   final database = openDatabase(
     join(await getDatabasesPath(), 'estoque_database.db'),
