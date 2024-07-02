@@ -47,14 +47,14 @@ class Produto {
     required this.unidade,
   });
 
-  Map<String, dynamic> toMap() {
+  Map<String, Object?> toMap() {
     return {
-      'id': id as int,
+      'id': int.parse(id),
       'tipo': tipo,
       'nome': nome,
-      'valorCompraTotal': valorCompraTotal as double,
-      'preco': preco as double,
-      'quantidade': quantidade as int,
+      'valorCompraTotal': double.parse(valorCompraTotal),
+      'preco': double.parse(preco),
+      'quantidade': int.parse(quantidade),
       'unidade': unidade,
     };
   }

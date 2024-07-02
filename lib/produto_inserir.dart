@@ -94,7 +94,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
       join(await getDatabasesPath(), 'estoque_database.db'),
     );
     await db.insert(
-      'produtos',
+      'estoque_database.db',
       produto.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -103,7 +103,6 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
   @override
   Widget build(BuildContext context) {
     WidgetsFlutterBinding.ensureInitialized();
-    final database = carregarDB();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Inserir Produto"),
@@ -185,7 +184,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
             onPressed: () {
               if (key.currentState!.validate()) {
                 Produto produto = Produto(
-                  id: DateTime.now().toString(),
+                  id: DateTime.now().hashCode.toString(),
                   tipo: myControllerTipo.text,
                   nome: myControllerNome.text,
                   valorCompraTotal: myControllerPrecoTotal.text,

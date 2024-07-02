@@ -21,6 +21,7 @@ Future main() async {
     },
     version: 1,
   );
+  print(database);
   runApp(const MainApp());
 }
 
