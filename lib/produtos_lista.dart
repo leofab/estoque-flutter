@@ -101,7 +101,11 @@ class _ProdutosListaState extends State<ProdutosLista> {
             ListTile(
               title: const Text("Vendas / Caixa"),
               onTap: () {
-                Navigator.pop(context);
+                if (ModalRoute.of(context)!.settings.name != "/vendas") {
+                  Navigator.of(context).pushNamed("/vendas");
+                } else {
+                  Navigator.pop(context);
+                }
               },
             ),
             ListTile(

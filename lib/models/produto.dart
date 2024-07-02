@@ -38,6 +38,7 @@ class Produto {
   String preco;
   String quantidade;
   String unidade;
+  String? vendidos;
   String? categoria;
   String? fornecedor;
   String? data;
@@ -56,6 +57,7 @@ class Produto {
     required this.preco,
     required this.quantidade,
     required this.unidade,
+    this.vendidos,
     this.categoria,
     this.fornecedor,
     this.data,
