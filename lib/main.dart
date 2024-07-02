@@ -4,7 +4,7 @@ import 'login.dart';
 import 'produtos_lista.dart';
 import 'produto_vendas.dart';
 
-void main() {
+void main() async {
   runApp(const MainApp());
 }
 
