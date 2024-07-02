@@ -32,38 +32,47 @@ class Produto {
   String id;
   String tipo;
   String nome;
-  String? descricao;
-  String? imagem;
   String valorCompraTotal;
   String preco;
   String quantidade;
   String unidade;
-  String? vendidos;
-  String? categoria;
-  String? fornecedor;
-  String? data;
-  String? validade;
-  String? lote;
-  String? local;
-  String? observacao;
 
   Produto({
     required this.id,
     required this.tipo,
     required this.nome,
-    this.descricao,
-    this.imagem,
     required this.valorCompraTotal,
     required this.preco,
     required this.quantidade,
     required this.unidade,
-    this.vendidos,
-    this.categoria,
-    this.fornecedor,
-    this.data,
-    this.validade,
-    this.lote,
-    this.local,
-    this.observacao,
   });
+
+  Map<String, Object?> toMap() {
+    return {
+      'id': int.parse(id),
+      'tipo': tipo,
+      'nome': nome,
+      'valorCompraTotal': double.parse(valorCompraTotal),
+      'preco': double.parse(preco),
+      'quantidade': int.parse(quantidade),
+      'unidade': unidade,
+    };
+  }
+
+  factory Produto.fromMap(Map<String, dynamic> map) {
+    return Produto(
+      id: map['id'],
+      tipo: map['tipo'],
+      nome: map['nome'],
+      valorCompraTotal: map['valorCompraTotal'],
+      preco: map['preco'],
+      quantidade: map['quantidade'],
+      unidade: map['unidade'],
+    );
+  }
+
+  @override
+  String toString() {
+    return 'Produto{id: $id, tipo: $tipo, nome: $nome, valorCompraTotal: $valorCompraTotal, preco: $preco, quantidade: $quantidade, unidade: $unidade}';
+  }
 }

@@ -1,10 +1,27 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'login.dart';
 import 'produtos_lista.dart';
 import 'produto_vendas.dart';
 
-void main() async {
+Future main() async {
+  sqfliteFfiInit();
+  databaseFactory = databaseFactoryFfi;
+  WidgetsFlutterBinding.ensureInitialized();
+  final database = openDatabase(
+    join(await getDatabasesPath(), 'estoque_database.db'),
+    onCreate: (db, version) {
+      return db.execute(
+        'CREATE TABLE produtos(id INTEGER PRIMARY KEY, tipo TEXT, nome TEXT, valorCompraTotal DOUBLE, preco DOUBLE, quantidade INTEGER, unidade TEXT)',
+      );
+    },
+    version: 1,
+  );
+  print(database);
   runApp(const MainApp());
 }
 
