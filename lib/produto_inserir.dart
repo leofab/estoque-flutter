@@ -1,5 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
 
 import './models/produto.dart';
 import 'produto_item.dart';
@@ -74,8 +77,33 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
     );
   }
 
+  void carregarDB() async {
+    openDatabase(
+      join(await getDatabasesPath(), 'estoque_database.db'),
+      onCreate: (db, version) {
+        return db.execute(
+          'CREATE TABLE produtos(id TEXT PRIMARY KEY, tipo TEXT, nome TEXT, valorCompraTotal TEXT, preco TEXT, quantidade TEXT, unidade TEXT)',
+        );
+      },
+      version: 1,
+    );
+  }
+
+  void inserirProdutoDB(Produto produto) async {
+    final Database db = await openDatabase(
+      join(await getDatabasesPath(), 'estoque_database.db'),
+    );
+    await db.insert(
+      'produtos',
+      produto.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    WidgetsFlutterBinding.ensureInitialized();
+    final database = carregarDB();
     return Scaffold(
       appBar: AppBar(
         title: const Text("Inserir Produto"),
@@ -165,6 +193,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                   quantidade: myControllerQuantidade.text,
                   unidade: myControllerUnidade.text,
                 );
+                inserirProdutoDB(produto);
                 MOCK_PRODUTOS_DATA.add(produto);
                 widget.update([
                   ...widget.produtos,

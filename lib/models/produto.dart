@@ -46,4 +46,33 @@ class Produto {
     required this.quantidade,
     required this.unidade,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id as int,
+      'tipo': tipo,
+      'nome': nome,
+      'valorCompraTotal': valorCompraTotal as double,
+      'preco': preco as double,
+      'quantidade': quantidade as int,
+      'unidade': unidade,
+    };
+  }
+
+  factory Produto.fromMap(Map<String, dynamic> map) {
+    return Produto(
+      id: map['id'],
+      tipo: map['tipo'],
+      nome: map['nome'],
+      valorCompraTotal: map['valorCompraTotal'],
+      preco: map['preco'],
+      quantidade: map['quantidade'],
+      unidade: map['unidade'],
+    );
+  }
+
+  @override
+  String toString() {
+    return 'Produto{id: $id, tipo: $tipo, nome: $nome, valorCompraTotal: $valorCompraTotal, preco: $preco, quantidade: $quantidade, unidade: $unidade}';
+  }
 }
