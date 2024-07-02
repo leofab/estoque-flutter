@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 import './models/produto.dart';
@@ -46,35 +47,19 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
   final key = GlobalKey<FormState>();
   final myControllerNome = TextEditingController();
   final myControllerTipo = TextEditingController();
-  final myControllerDescricao = TextEditingController();
   final myControllerPrecoTotal = TextEditingController();
   final myControllerPreco = TextEditingController();
   final myControllerQuantidade = TextEditingController();
   final myControllerUnidade = TextEditingController();
-  final myControllerCategoria = TextEditingController();
-  final myControllerFornecedor = TextEditingController();
-  final myControllerData = TextEditingController();
-  final myControllerValidade = TextEditingController();
-  final myControllerLote = TextEditingController();
-  final myControllerLocal = TextEditingController();
-  final myControllerObservacao = TextEditingController();
 
   @override
   void dispose() {
     myControllerNome.dispose();
     myControllerTipo.dispose();
-    myControllerDescricao.dispose();
     myControllerPrecoTotal.dispose();
     myControllerPreco.dispose();
     myControllerQuantidade.dispose();
     myControllerUnidade.dispose();
-    myControllerCategoria.dispose();
-    myControllerFornecedor.dispose();
-    myControllerData.dispose();
-    myControllerValidade.dispose();
-    myControllerLote.dispose();
-    myControllerLocal.dispose();
-    myControllerObservacao.dispose();
     super.dispose();
   }
 
@@ -164,41 +149,6 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                     validator: (value) =>
                         value!.isEmpty ? "Campo obrigatório" : null,
                   ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Categoria"),
-                    controller: myControllerCategoria,
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Fornecedor"),
-                    controller: myControllerFornecedor,
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Data"),
-                    controller: myControllerData,
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Validade"),
-                    controller: myControllerValidade,
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Lote"),
-                    controller: myControllerLote,
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Local"),
-                    controller: myControllerLocal,
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Observação"),
-                    controller: myControllerObservacao,
-                  ),
                 ],
               ),
             ),
@@ -210,18 +160,10 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                   id: DateTime.now().toString(),
                   tipo: myControllerTipo.text,
                   nome: myControllerNome.text,
-                  descricao: myControllerDescricao.text,
                   valorCompraTotal: myControllerPrecoTotal.text,
                   preco: myControllerPreco.text,
                   quantidade: myControllerQuantidade.text,
                   unidade: myControllerUnidade.text,
-                  categoria: myControllerCategoria.text,
-                  fornecedor: myControllerFornecedor.text,
-                  data: myControllerData.text,
-                  validade: myControllerValidade.text,
-                  lote: myControllerLote.text,
-                  local: myControllerLocal.text,
-                  observacao: myControllerObservacao.text,
                 );
                 MOCK_PRODUTOS_DATA.add(produto);
                 widget.update([
