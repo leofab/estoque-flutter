@@ -1,7 +1,8 @@
+import 'dart:io' as io;
+import 'package:path/path.dart' as p;
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'login.dart';
@@ -22,7 +23,24 @@ Future main() async {
     },
     version: 1,
   );
-  print(database);
+
+  Future<List<Produto>> produtos() async {
+    final Database db = await database;
+    final List<Map<String, dynamic>> maps = await db.query('produtos');
+    return List.generate(maps.length, (i) {
+      return Produto(
+        id: maps[i]['id'],
+        tipo: maps[i]['tipo'],
+        nome: maps[i]['nome'],
+        valorCompraTotal: maps[i]['valorCompraTotal'],
+        preco: maps[i]['preco'],
+        quantidade: maps[i]['quantidade'],
+        unidade: maps[i]['unidade'],
+      );
+    });
+  }
+
+  print(await produtos());
 
   var produto1 = Produto(
       id: 1,
@@ -32,6 +50,21 @@ Future main() async {
       preco: 5.0,
       quantidade: 10,
       unidade: 'kg');
+
+  Future<void> inserirProdutoDB(Produto produto) {
+    return database.then((db) {
+      db.insert(
+        'produtos',
+        produto.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+    });
+  }
+
+  inserirProdutoDB(produto1);
+
+  print(await produtos());
+
   runApp(const MainApp());
 }
 

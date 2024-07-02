@@ -19,11 +19,11 @@ class ProdutosLista extends StatefulWidget {
 class _ProdutosListaState extends State<ProdutosLista> {
   List<ProdutoItem> produtos = MOCK_PRODUTOS_DATA
       .map((produto) => ProdutoItem(
-            (produto.id as String),
+            produto.id.toString(),
             produto.nome,
             produto.nome,
-            (produto.preco as String),
-            (produto.quantidade as String),
+            produto.preco.toString(),
+            produto.quantidade.toString(),
           ))
       .toList();
 
@@ -149,11 +149,11 @@ class _ProdutosListaState extends State<ProdutosLista> {
           onPressed: () {
             _update(MOCK_PRODUTOS_DATA
                 .map((produto) => ProdutoItem(
-                      (produto.id as String),
+                      produto.id.toString(),
                       produto.nome,
                       produto.nome,
-                      (produto.preco as String),
-                      (produto.quantidade as String),
+                      produto.preco.toString(),
+                      produto.quantidade.toString(),
                     ))
                 .toList());
           },

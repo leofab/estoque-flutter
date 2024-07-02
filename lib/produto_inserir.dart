@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import './models/produto.dart';
 import 'produto_item.dart';
@@ -77,22 +77,8 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
     );
   }
 
-  void carregarDB() async {
-    openDatabase(
-      join(await getDatabasesPath(), 'estoque_database.db'),
-      onCreate: (db, version) {
-        return db.execute(
-          'CREATE TABLE produtos(id TEXT PRIMARY KEY, tipo TEXT, nome TEXT, valorCompraTotal TEXT, preco TEXT, quantidade TEXT, unidade TEXT)',
-        );
-      },
-      version: 1,
-    );
-  }
-
   void inserirProdutoDB(Produto produto) async {
-    final Database db = await openDatabase(
-      join(await getDatabasesPath(), 'estoque_database.db'),
-    );
+    var db = await databaseFactory.openDatabase(inMemoryDatabasePath);
     await db.insert(
       'estoque_database.db',
       produto.toMap(),
@@ -102,7 +88,8 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsFlutterBinding.ensureInitialized();
+    sqfliteFfiInit();
+    databaseFactory = databaseFactoryFfi;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Inserir Produto"),
@@ -187,9 +174,9 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                   id: DateTime.now().hashCode,
                   tipo: myControllerTipo.text,
                   nome: myControllerNome.text,
-                  valorCompraTotal: (myControllerPrecoTotal.text as double),
-                  preco: (myControllerPreco.text as double),
-                  quantidade: (myControllerQuantidade.text as int),
+                  valorCompraTotal: double.parse(myControllerPrecoTotal.text),
+                  preco: double.parse(myControllerPreco.text),
+                  quantidade: int.parse(myControllerQuantidade.text),
                   unidade: myControllerUnidade.text,
                 );
                 inserirProdutoDB(produto);
@@ -197,11 +184,11 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                 widget.update([
                   ...widget.produtos,
                   ProdutoItem(
-                    (produto.id as String),
+                    produto.id.toString(),
                     produto.nome,
                     produto.tipo,
-                    (produto.preco as String),
-                    (produto.quantidade as String),
+                    produto.preco.toString(),
+                    produto.quantidade.toString(),
                   ),
                 ]);
                 Navigator.of(context).pop();
