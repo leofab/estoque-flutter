@@ -184,12 +184,12 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
             onPressed: () {
               if (key.currentState!.validate()) {
                 Produto produto = Produto(
-                  id: DateTime.now().hashCode.toString(),
+                  id: DateTime.now().hashCode,
                   tipo: myControllerTipo.text,
                   nome: myControllerNome.text,
-                  valorCompraTotal: myControllerPrecoTotal.text,
-                  preco: myControllerPreco.text,
-                  quantidade: myControllerQuantidade.text,
+                  valorCompraTotal: (myControllerPrecoTotal.text as double),
+                  preco: (myControllerPreco.text as double),
+                  quantidade: (myControllerQuantidade.text as int),
                   unidade: myControllerUnidade.text,
                 );
                 inserirProdutoDB(produto);
@@ -197,11 +197,11 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                 widget.update([
                   ...widget.produtos,
                   ProdutoItem(
-                    produto.id,
+                    (produto.id as String),
                     produto.nome,
                     produto.tipo,
-                    produto.preco,
-                    produto.quantidade,
+                    (produto.preco as String),
+                    (produto.quantidade as String),
                   ),
                 ]);
                 Navigator.of(context).pop();

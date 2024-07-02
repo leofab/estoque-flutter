@@ -29,12 +29,12 @@ enum Tipos {
 }
 
 class Produto {
-  String id;
+  int id;
   String tipo;
   String nome;
-  String valorCompraTotal;
-  String preco;
-  String quantidade;
+  double valorCompraTotal;
+  double preco;
+  int quantidade;
   String unidade;
 
   Produto({
@@ -49,12 +49,12 @@ class Produto {
 
   Map<String, Object?> toMap() {
     return {
-      'id': int.parse(id),
+      'id': id,
       'tipo': tipo,
       'nome': nome,
-      'valorCompraTotal': double.parse(valorCompraTotal),
-      'preco': double.parse(preco),
-      'quantidade': int.parse(quantidade),
+      'valorCompraTotal': valorCompraTotal,
+      'preco': preco,
+      'quantidade': quantidade,
       'unidade': unidade,
     };
   }

@@ -7,6 +7,7 @@ import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'login.dart';
 import 'produtos_lista.dart';
 import 'produto_vendas.dart';
+import 'models/produto.dart';
 
 Future main() async {
   sqfliteFfiInit();
@@ -22,6 +23,15 @@ Future main() async {
     version: 1,
   );
   print(database);
+
+  var produto1 = Produto(
+      id: 1,
+      tipo: 'Alimento',
+      nome: 'Arroz',
+      valorCompraTotal: 10.0,
+      preco: 5.0,
+      quantidade: 10,
+      unidade: 'kg');
   runApp(const MainApp());
 }
 
