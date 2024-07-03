@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:provider/provider.dart%20%20';
 
 import '../mock_produtos_data.dart';
 import '../widget/produto_item.dart';
@@ -27,9 +28,12 @@ class _ProdutosListaState extends State<ProdutosLista> {
       .toList();
 
   void inserirProduto(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-      return ProdutoInserir(update: _update, produtos: produtos);
-    }));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (BuildContext context) => ChangeNotifierProvider(
+              create: (context) => Produtos(),
+              builder: (context, child) =>
+                  ProdutoInserir(update: _update, produtos: produtos),
+            )));
   }
 
   void filtrarProdutos(BuildContext context) {
@@ -138,7 +142,8 @@ class _ProdutosListaState extends State<ProdutosLista> {
         persistentFooterButtons: [
           ElevatedButton(
             onPressed: () {
-              _update(MOCK_PRODUTOS_DATA
+              _update(Provider.of<Produtos>(context)
+                  .items
                   .map((produto) => ProdutoItem(
                         produto.id.toString(),
                         produto.nome,
