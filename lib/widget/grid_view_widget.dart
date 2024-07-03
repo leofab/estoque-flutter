@@ -7,7 +7,8 @@ import '../providers/produtos_provider.dart';
 class GridViewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final produtos = Provider.of<Produtos>(context);
+    final produtosGrid = Provider.of<Produtos>(context);
+    final produtos = produtosGrid.items;
     return GridView(
         padding: const EdgeInsets.all(25),
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
@@ -17,14 +18,16 @@ class GridViewWidget extends StatelessWidget {
           mainAxisSpacing: 20,
         ),
         physics: const ScrollPhysics(),
-        children: produtos.items.map((produto) {
-          return ProdutoItem(
-            produto.id.toString(),
-            produto.nome,
-            produto.nome,
-            produto.preco.toString(),
-            produto.quantidade.toString(),
-          );
-        }).toList());
+        children: produtos
+            .map(
+              (produto) => ProdutoItem(
+                produto.id.toString(),
+                produto.nome,
+                produto.nome,
+                produto.preco.toString(),
+                produto.quantidade.toString(),
+              ),
+            )
+            .toList());
   }
 }
