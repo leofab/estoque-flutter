@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_helder/produto_detalhes_tela.dart';
+import 'package:flutter_application_helder/screens/produto_detalhes_tela.dart';
 
 class ProdutoItem extends StatelessWidget {
   final String id;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'produto_item.dart';
-import 'mock_produtos_data.dart';
+import '../widget/produto_item.dart';
+import '../mock_produtos_data.dart';
 
 class Filtrar extends StatefulWidget {
   final List<ProdutoItem> produtos;
