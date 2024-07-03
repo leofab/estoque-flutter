@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../mock_produtos_data.dart';
 import '../widget/produto_item.dart';
+import '../widget/grid_view_widget.dart';
 import 'produto_inserir.dart';
 import 'filtrar.dart';
 
@@ -43,7 +44,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    var scaffold = Scaffold(
       appBar: AppBar(
         title: Text(
           "Produtos",
@@ -61,17 +62,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
         ),
         backgroundColor: Colors.black45,
       ),
-      body: GridView(
-        padding: const EdgeInsets.all(25),
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
-        ),
-        physics: const ScrollPhysics(),
-        children: produtos,
-      ),
+      body: GridViewWidget(),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -157,5 +148,6 @@ class _ProdutosListaState extends State<ProdutosLista> {
         ),
       ],
     );
+    return scaffold;
   }
 }
