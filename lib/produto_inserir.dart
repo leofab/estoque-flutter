@@ -1,8 +1,4 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:path/path.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import './models/produto.dart';
 import 'produto_item.dart';
@@ -77,19 +73,8 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
     );
   }
 
-  void inserirProdutoDB(Produto produto) async {
-    var db = await databaseFactory.openDatabase(inMemoryDatabasePath);
-    await db.insert(
-      'estoque_database.db',
-      produto.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
-    sqfliteFfiInit();
-    databaseFactory = databaseFactoryFfi;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Inserir Produto"),
@@ -179,7 +164,6 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                   quantidade: int.parse(myControllerQuantidade.text),
                   unidade: myControllerUnidade.text,
                 );
-                inserirProdutoDB(produto);
                 MOCK_PRODUTOS_DATA.add(produto);
                 widget.update([
                   ...widget.produtos,
