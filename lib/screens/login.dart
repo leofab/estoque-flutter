@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
-
-  void login(BuildContext context) {
-    Navigator.pushReplacementNamed(context, '/produtos');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +79,7 @@ class LoginScreen extends StatelessWidget {
           margin: const EdgeInsets.only(top: 30),
           child: ElevatedButton(
             onPressed: () {
-              login(context);
+              context.pushReplacement('/produtos');
             },
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.only(left: 50, right: 50),

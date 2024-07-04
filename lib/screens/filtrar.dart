@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../widget/produto_item.dart';
-import '../mock_produtos_data.dart';
 
 class Filtrar extends StatefulWidget {
-  final List<ProdutoItem> produtos;
-  final Function(List<ProdutoItem>) update;
-  const Filtrar({super.key, required this.update, required this.produtos});
+  const Filtrar({super.key});
 
   @override
   State<Filtrar> createState() => _FiltrarState();
@@ -59,16 +56,6 @@ class _FiltrarState extends State<Filtrar> {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: ElevatedButton(
                       onPressed: () {
-                        widget.update(produtos = (MOCK_PRODUTOS_DATA
-                            .where((produto) =>
-                                produto.tipo == myControllerTipo.text)
-                            .map((p) => ProdutoItem(
-                                p.id.toString(),
-                                p.nome,
-                                p.tipo,
-                                p.preco.toString(),
-                                p.quantidade.toString()))
-                            .toList()));
                         retornar(context);
                       },
                       child: const Text("Filtrar"),

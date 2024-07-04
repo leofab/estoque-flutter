@@ -3,14 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../models/produto.dart';
 import '../widget/produto_item.dart';
-import '../mock_produtos_data.dart';
 import '../providers/produtos_provider.dart';
 
 class ProdutoInserir extends StatefulWidget {
-  final List<ProdutoItem> produtos;
-  final Function(List<ProdutoItem>) update;
-  const ProdutoInserir(
-      {super.key, required this.update, required this.produtos});
+  const ProdutoInserir({super.key});
 
   @override
   State<ProdutoInserir> createState() => _ProdutoInserirState();
@@ -52,17 +48,6 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
   final myControllerPreco = TextEditingController();
   final myControllerQuantidade = TextEditingController();
   final myControllerUnidade = TextEditingController();
-
-  @override
-  void dispose() {
-    myControllerNome.dispose();
-    myControllerTipo.dispose();
-    myControllerPrecoTotal.dispose();
-    myControllerPreco.dispose();
-    myControllerQuantidade.dispose();
-    myControllerUnidade.dispose();
-    super.dispose();
-  }
 
   void alerta(BuildContext context) {
     showDialog(

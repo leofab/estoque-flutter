@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/provider.dart%20%20';
+import 'package:go_router/go_router.dart';
 
-import '../mock_produtos_data.dart';
 import '../widget/produto_item.dart';
 import '../widget/grid_view_widget.dart';
 import 'produto_inserir.dart';
@@ -17,37 +16,6 @@ class ProdutosLista extends StatefulWidget {
 }
 
 class _ProdutosListaState extends State<ProdutosLista> {
-  List<ProdutoItem> produtos = MOCK_PRODUTOS_DATA
-      .map((produto) => ProdutoItem(
-            produto.id.toString(),
-            produto.nome,
-            produto.nome,
-            produto.preco.toString(),
-            produto.quantidade.toString(),
-          ))
-      .toList();
-
-  void inserirProduto(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (BuildContext context) => ChangeNotifierProvider(
-              create: (context) => Produtos(),
-              builder: (context, child) =>
-                  ProdutoInserir(update: _update, produtos: produtos),
-            )));
-  }
-
-  void filtrarProdutos(BuildContext context) {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-      return Filtrar(update: _update, produtos: produtos);
-    }));
-  }
-
-  void _update(List<ProdutoItem> newProdutos) {
-    setState(() {
-      produtos = newProdutos;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     var scaffold = ChangeNotifierProvider(
@@ -91,9 +59,9 @@ class _ProdutosListaState extends State<ProdutosLista> {
                 title: const Text("Produtos"),
                 onTap: () {
                   if (ModalRoute.of(context)!.settings.name != "/produtos") {
-                    Navigator.of(context).pushReplacementNamed("/produtos");
+                    context.push('/produtos');
                   } else {
-                    Navigator.pop(context);
+                    context.pop();
                   }
                 },
               ),
@@ -101,16 +69,16 @@ class _ProdutosListaState extends State<ProdutosLista> {
                 title: const Text("Vendas / Caixa"),
                 onTap: () {
                   if (ModalRoute.of(context)!.settings.name != "/vendas") {
-                    Navigator.of(context).pushNamed("/vendas");
+                    context.go("/produtos/vendas");
                   } else {
-                    Navigator.pop(context);
+                    context.pop();
                   }
                 },
               ),
               ListTile(
                 title: const Text("Sair"),
                 onTap: () {
-                  Navigator.pushReplacementNamed(context, '/login');
+                  context.pushReplacement('/login');
                 },
               ),
             ],
@@ -123,14 +91,18 @@ class _ProdutosListaState extends State<ProdutosLista> {
             children: [
               FloatingActionButton.extended(
                 label: const Text("Filtrar"),
-                onPressed: () => filtrarProdutos(context),
+                onPressed: () {
+                  context.go('/produtos/filtrar');
+                },
                 backgroundColor: Colors.amber[300],
                 splashColor: Colors.amber[100],
                 icon: const Icon(Icons.filter_alt),
                 heroTag: null,
               ),
               FloatingActionButton(
-                onPressed: () => inserirProduto(context),
+                onPressed: () {
+                  context.go('/produtos/inserir');
+                },
                 backgroundColor: Colors.amber[300],
                 splashColor: Colors.amber[100],
                 heroTag: null,
@@ -141,18 +113,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
         ),
         persistentFooterButtons: [
           ElevatedButton(
-            onPressed: () {
-              _update(Provider.of<Produtos>(context)
-                  .items
-                  .map((produto) => ProdutoItem(
-                        produto.id.toString(),
-                        produto.nome,
-                        produto.nome,
-                        produto.preco.toString(),
-                        produto.quantidade.toString(),
-                      ))
-                  .toList());
-            },
+            onPressed: () {},
             child: const Text("Limpar Filtros"),
           ),
         ],
