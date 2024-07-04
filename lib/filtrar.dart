@@ -63,11 +63,11 @@ class _FiltrarState extends State<Filtrar> {
                             .where((produto) =>
                                 produto.tipo == myControllerTipo.text)
                             .map((p) => ProdutoItem(
-                                p.id.toString(),
+                                (p.id as String),
                                 p.nome,
                                 p.tipo,
-                                p.preco.toString(),
-                                p.quantidade.toString()))
+                                (p.preco as String),
+                                (p.quantidade as String)))
                             .toList()));
                         retornar(context);
                       },
