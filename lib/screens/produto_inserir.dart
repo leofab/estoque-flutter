@@ -175,18 +175,32 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                 quantidade: int.parse(myControllerQuantidade.text),
                 unidade: myControllerUnidade.text,
               );
+              setState(() {
+                produtos.addProduto(produto);
+                MOCK_PRODUTOS_DATA.add(produto);
+                widget.update([
+                  ...widget.produtos,
+                  ProdutoItem(
+                    produto.id.toString(),
+                    produto.nome,
+                    produto.tipo,
+                    produto.preco.toString(),
+                    produto.quantidade.toString(),
+                  ),
+                ]);
+              });
               produtos.addProduto(produto);
-              // MOCK_PRODUTOS_DATA.add(produto);
-              // widget.update([
-              //   ...widget.produtos,
-              //   ProdutoItem(
-              //     produto.id.toString(),
-              //     produto.nome,
-              //     produto.tipo,
-              //     produto.preco.toString(),
-              //     produto.quantidade.toString(),
-              //   ),
-              // ]);
+              MOCK_PRODUTOS_DATA.add(produto);
+              widget.update([
+                ...widget.produtos,
+                ProdutoItem(
+                  produto.id.toString(),
+                  produto.nome,
+                  produto.tipo,
+                  produto.preco.toString(),
+                  produto.quantidade.toString(),
+                ),
+              ]);
               Navigator.of(context).pop();
               alerta(context);
             }
