@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/produtos_provider.dart';
 import '../models/produto.dart';
 import 'produto_item.dart';
 import '../mock_produtos_data.dart';
 
 class ProdutoInserir extends StatefulWidget {
-  final List<ProdutoItem> produtos;
-  final Function(List<ProdutoItem>) update;
-  const ProdutoInserir(
-      {super.key, required this.update, required this.produtos});
+  const ProdutoInserir({super.key});
 
   @override
   State<ProdutoInserir> createState() => _ProdutoInserirState();
@@ -75,6 +74,8 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = ProdutosProvider.of(context);
+    int id = provider.produtos.length + 1;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Inserir Produto"),
@@ -156,7 +157,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
             onPressed: () {
               if (key.currentState!.validate()) {
                 Produto produto = Produto(
-                  id: DateTime.now().hashCode,
+                  id: id,
                   tipo: myControllerTipo.text,
                   nome: myControllerNome.text,
                   valorCompraTotal: double.parse(myControllerPrecoTotal.text),
@@ -164,17 +165,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                   quantidade: int.parse(myControllerQuantidade.text),
                   unidade: myControllerUnidade.text,
                 );
-                MOCK_PRODUTOS_DATA.add(produto);
-                widget.update([
-                  ...widget.produtos,
-                  ProdutoItem(
-                    produto.id.toString(),
-                    produto.nome,
-                    produto.tipo,
-                    produto.preco.toString(),
-                    produto.quantidade.toString(),
-                  ),
-                ]);
+                provider.adicionarProduto(produto);
                 Navigator.of(context).pop();
                 alerta(context);
               }
