@@ -20,11 +20,12 @@ class _ProdutosListaState extends State<ProdutosLista> {
 
     List<ProdutoItem> produtos = provider.produtos
         .map((produto) => ProdutoItem(
-              produto.id.toString(),
-              produto.nome,
-              produto.nome,
-              produto.preco.toString(),
-              produto.quantidade.toString(),
+              produto: produto,
+              id: produto.id.toString(),
+              tipo: produto.nome,
+              nome: produto.nome,
+              preco: produto.preco.toString(),
+              quantidade: produto.quantidade.toString(),
             ))
         .toList();
 

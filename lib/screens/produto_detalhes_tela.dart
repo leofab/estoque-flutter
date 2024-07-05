@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../models/produto.dart';
 import 'venda.dart';
 
 class ProdutoDetalhes extends StatefulWidget {
+  final Produto produto;
   final String id;
   final String tipo;
   final String nome;
@@ -10,8 +12,13 @@ class ProdutoDetalhes extends StatefulWidget {
   final String quantidade;
 
   const ProdutoDetalhes(
-      this.id, this.tipo, this.nome, this.preco, this.quantidade,
-      {super.key});
+      {super.key,
+      required this.produto,
+      required this.id,
+      required this.tipo,
+      required this.nome,
+      required this.preco,
+      required this.quantidade});
 
   @override
   State<ProdutoDetalhes> createState() => _ProdutoDetalhesState();
@@ -47,7 +54,9 @@ class _ProdutoDetalhesState extends State<ProdutoDetalhes> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
-              context, MaterialPageRoute(builder: (context) => const Venda()));
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Venda(produto: widget.produto)));
         },
         child: const Text("Venda"),
       ),
