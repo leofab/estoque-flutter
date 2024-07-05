@@ -158,7 +158,7 @@ class ProdutosProvider extends ChangeNotifier {
 
   List<Produto> filtrarPorTipo(String tipo) {
     produtosFiltro =
-        produtos.where((produto) => produto.tipo.contains(tipo)).toList();
+        _produtos.where((produto) => produto.tipo.contains(tipo)).toList();
     notifyListeners();
     return produtosFiltro;
   }

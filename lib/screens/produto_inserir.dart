@@ -158,14 +158,16 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
               if (key.currentState!.validate()) {
                 Produto produto = Produto(
                   id: id,
-                  tipo: myControllerTipo.text,
+                  tipo: myControllerTipo.text.toLowerCase(),
                   nome: myControllerNome.text,
                   valorCompraTotal: double.parse(myControllerPrecoTotal.text),
                   preco: double.parse(myControllerPreco.text),
                   quantidade: int.parse(myControllerQuantidade.text),
                   unidade: myControllerUnidade.text,
                 );
+                print(produto.toString());
                 provider.adicionarProduto(produto);
+                print(provider.produtos.toString());
                 Navigator.of(context).pop();
                 alerta(context);
               }
