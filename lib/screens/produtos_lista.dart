@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_helder/providers/produtos_provider.dart';
-import 'package:provider/provider.dart';
 
-import '../mock_produtos_data.dart';
 import 'produto_item.dart';
 import 'produto_inserir.dart';
 import 'filtrar.dart';
@@ -15,24 +13,6 @@ class ProdutosLista extends StatefulWidget {
 }
 
 class _ProdutosListaState extends State<ProdutosLista> {
-  // void inserirProduto(BuildContext context) {
-  //   Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-  //     return ProdutoInserir(update: _update, produtos: produtos);
-  //   }));
-  // }
-
-  // void filtrarProdutos(BuildContext context) {
-  //   Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-  //     return Filtrar(update: _update, produtos: produtos);
-  //   }));
-  // }
-
-  void _update(List<ProdutoItem> newProdutos) {
-    setState(() {
-      produtosFiltro = newProdutos;
-    });
-  }
-
   List<ProdutoItem> produtosFiltro = [];
   @override
   Widget build(BuildContext context) {
@@ -131,7 +111,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
               label: const Text("Filtrar"),
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (context) {
-                  return Filtrar(update: _update);
+                  return const Filtrar();
                 },
               )),
               backgroundColor: Colors.amber[300],
@@ -156,15 +136,6 @@ class _ProdutosListaState extends State<ProdutosLista> {
       persistentFooterButtons: [
         ElevatedButton(
           onPressed: () {
-            // _update(MOCK_PRODUTOS_DATA
-            //     .map((produto) => ProdutoItem(
-            //           produto.id.toString(),
-            //           produto.nome,
-            //           produto.nome,
-            //           produto.preco.toString(),
-            //           produto.quantidade.toString(),
-            //         ))
-            //     .toList());
             provider.limparFiltro();
           },
           child: const Text("Limpar Filtros"),

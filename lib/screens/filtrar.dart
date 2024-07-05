@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../providers/produtos_provider.dart';
-import 'produto_item.dart';
-import '../mock_produtos_data.dart';
 
 class Filtrar extends StatefulWidget {
-  final Function(List<ProdutoItem>) update;
-  const Filtrar({super.key, required this.update});
+  const Filtrar({super.key});
 
   @override
   State<Filtrar> createState() => _FiltrarState();

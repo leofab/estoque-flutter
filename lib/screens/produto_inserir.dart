@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../providers/produtos_provider.dart';
 import '../models/produto.dart';
-import 'produto_item.dart';
-import '../mock_produtos_data.dart';
 
 class ProdutoInserir extends StatefulWidget {
   const ProdutoInserir({super.key});
@@ -165,9 +162,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                   quantidade: int.parse(myControllerQuantidade.text),
                   unidade: myControllerUnidade.text,
                 );
-                print(produto.toString());
                 provider.adicionarProduto(produto);
-                print(provider.produtos.toString());
                 Navigator.of(context).pop();
                 alerta(context);
               }
