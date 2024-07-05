@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'venda.dart';
+
 class ProdutoDetalhes extends StatefulWidget {
   final String id;
   final String tipo;
@@ -44,7 +46,8 @@ class _ProdutoDetalhesState extends State<ProdutoDetalhes> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => const Venda()));
         },
         child: const Text("Venda"),
       ),

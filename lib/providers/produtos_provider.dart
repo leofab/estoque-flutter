@@ -134,6 +134,20 @@ class ProdutosProvider extends ChangeNotifier {
 
   List<Produto> produtosFiltro = [];
 
+  List<Produto> produtosVendidos = [];
+
+  double valorCompraTotal() {
+    return _produtos.fold(0, (total, produto) {
+      return total + produto.valorCompraTotal;
+    });
+  }
+
+  double valorVendaTotal() {
+    return produtosVendidos.fold(0, (total, produto) {
+      return total + produto.preco * produto.quantidade;
+    });
+  }
+
   bool get filtroOn {
     return produtosFiltro.isNotEmpty;
   }
