@@ -6,7 +6,8 @@ import 'produto_item.dart';
 import '../mock_produtos_data.dart';
 
 class Filtrar extends StatefulWidget {
-  const Filtrar({super.key});
+  final Function(List<ProdutoItem>) update;
+  const Filtrar({super.key, required this.update});
 
   @override
   State<Filtrar> createState() => _FiltrarState();
@@ -34,7 +35,6 @@ class _FiltrarState extends State<Filtrar> {
     Navigator.of(context).pop();
   }
 
-  List produtos = [];
   @override
   Widget build(BuildContext context) {
     final provider = ProdutosProvider.of(context);
@@ -70,7 +70,7 @@ class _FiltrarState extends State<Filtrar> {
                         //         p.preco.toString(),
                         //         p.quantidade.toString()))
                         //     .toList()));
-                        provider.produtos =
+                        provider.produtosFiltro =
                             provider.filtrarPorTipo(myControllerTipo.text);
                         retornar(context);
                       },

@@ -133,7 +133,16 @@ class ProdutosProvider extends ChangeNotifier {
     ),
   ];
 
+  List<Produto> produtosFiltro = [];
+
+  bool get filtroOn {
+    return produtosFiltro.isNotEmpty;
+  }
+
   List<Produto> get produtos {
+    if (produtosFiltro.isNotEmpty) {
+      return produtosFiltro;
+    }
     return [..._produtos];
   }
 
@@ -147,31 +156,16 @@ class ProdutosProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  void atualizarProduto(String id, Produto novoProduto) {
-    final produtoIndex = _produtos.indexWhere((produto) => produto.id == id);
-    if (produtoIndex >= 0) {
-      _produtos[produtoIndex] = novoProduto;
-      notifyListeners();
-    } else {
-      print('...');
-    }
-  }
-
-  void deletarProduto(String id) {
-    _produtos.removeWhere((produto) => produto.id == id);
-    notifyListeners();
-  }
-
-  Produto encontrarPorId(String id) {
-    return _produtos.firstWhere((produto) => produto.id == id);
-  }
-
-  List<Produto> filtrarPorNome(String nome) {
-    return _produtos.where((produto) => produto.nome.contains(nome)).toList();
-  }
-
   List<Produto> filtrarPorTipo(String tipo) {
-    return _produtos.where((produto) => produto.tipo.contains(tipo)).toList();
+    produtosFiltro =
+        produtos.where((produto) => produto.tipo.contains(tipo)).toList();
+    notifyListeners();
+    return produtosFiltro;
+  }
+
+  void limparFiltro() {
+    produtosFiltro = [];
+    notifyListeners();
   }
 
   static ProdutosProvider of(BuildContext context, {bool listen = true}) {

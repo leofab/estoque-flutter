@@ -26,14 +26,14 @@ class _ProdutosListaState extends State<ProdutosLista> {
   //     return Filtrar(update: _update, produtos: produtos);
   //   }));
   // }
-  
 
-  // void _update(List<ProdutoItem> newProdutos) {
-  //   setState(() {
-  //     produtos = newProdutos;
-  //   });
-  // }
+  void _update(List<ProdutoItem> newProdutos) {
+    setState(() {
+      produtosFiltro = newProdutos;
+    });
+  }
 
+  List<ProdutoItem> produtosFiltro = [];
   @override
   Widget build(BuildContext context) {
     ProdutosProvider provider = ProdutosProvider.of(context);
@@ -47,6 +47,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
               produto.quantidade.toString(),
             ))
         .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -129,8 +130,8 @@ class _ProdutosListaState extends State<ProdutosLista> {
             FloatingActionButton.extended(
               label: const Text("Filtrar"),
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) {
-                  return const Filtrar();
+                builder: (context) {
+                  return Filtrar(update: _update);
                 },
               )),
               backgroundColor: Colors.amber[300],
@@ -164,6 +165,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
             //           produto.quantidade.toString(),
             //         ))
             //     .toList());
+            provider.limparFiltro();
           },
           child: const Text("Limpar Filtros"),
         ),
