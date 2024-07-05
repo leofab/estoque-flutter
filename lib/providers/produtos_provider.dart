@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/produto.dart';
+import '../screens/produto_item.dart';
 
 class ProdutosProvider extends ChangeNotifier {
   List<Produto> _produtos = [
@@ -134,6 +135,11 @@ class ProdutosProvider extends ChangeNotifier {
 
   List<Produto> get produtos {
     return [..._produtos];
+  }
+
+  set produtos(List<Produto> produtos) {
+    _produtos = produtos;
+    notifyListeners();
   }
 
   void adicionarProduto(Produto produto) {

@@ -26,6 +26,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
   //     return Filtrar(update: _update, produtos: produtos);
   //   }));
   // }
+  
 
   // void _update(List<ProdutoItem> newProdutos) {
   //   setState(() {
@@ -127,7 +128,11 @@ class _ProdutosListaState extends State<ProdutosLista> {
           children: [
             FloatingActionButton.extended(
               label: const Text("Filtrar"),
-              onPressed: () {},
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) {
+                  return const Filtrar();
+                },
+              )),
               backgroundColor: Colors.amber[300],
               splashColor: Colors.amber[100],
               icon: const Icon(Icons.filter_alt),
