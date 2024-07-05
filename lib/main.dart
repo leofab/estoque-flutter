@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 
-import 'login.dart';
-import 'produtos_lista.dart';
-import 'produto_vendas.dart';
+import 'screens/login.dart';
+import 'screens/produtos_lista.dart';
+import 'screens/produto_vendas.dart';
 
 Future main() async {
   runApp(const MainApp());

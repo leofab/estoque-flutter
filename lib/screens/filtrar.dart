@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'produto_item.dart';
-import 'mock_produtos_data.dart';
+import '../mock_produtos_data.dart';
 
 class Filtrar extends StatefulWidget {
   final List<ProdutoItem> produtos;
@@ -63,11 +63,11 @@ class _FiltrarState extends State<Filtrar> {
                             .where((produto) =>
                                 produto.tipo == myControllerTipo.text)
                             .map((p) => ProdutoItem(
-                                (p.id as String),
+                                p.id.toString(),
                                 p.nome,
                                 p.tipo,
-                                (p.preco as String),
-                                (p.quantidade as String)))
+                                p.preco.toString(),
+                                p.quantidade.toString()))
                             .toList()));
                         retornar(context);
                       },

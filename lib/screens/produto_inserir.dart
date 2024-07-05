@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import './models/produto.dart';
+import '../models/produto.dart';
 import 'produto_item.dart';
-import 'mock_produtos_data.dart';
+import '../mock_produtos_data.dart';
 
 class ProdutoInserir extends StatefulWidget {
   final List<ProdutoItem> produtos;

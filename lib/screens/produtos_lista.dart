@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'mock_produtos_data.dart';
+import '../mock_produtos_data.dart';
 import 'produto_item.dart';
 import 'produto_inserir.dart';
 import 'filtrar.dart';
