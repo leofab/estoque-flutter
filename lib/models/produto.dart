@@ -28,6 +28,19 @@ enum Tipos {
   final Color cor;
 }
 
+enum Unidades {
+  lata350("Lata 350"),
+  lata269("Lata 269"),
+  seissentos("600"),
+  litrao("Litrão"),
+  litro("Litro"),
+  saco("Saco");
+
+  const Unidades(this.unidade);
+  final String unidade;
+  final Color cor = Colors.green;
+}
+
 class Produto {
   int id;
   String tipo;

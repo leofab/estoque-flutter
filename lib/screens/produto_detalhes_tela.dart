@@ -56,6 +56,8 @@ class _ProdutoDetalhesState extends State<ProdutoDetalhes> {
                 style: const TextStyle(fontSize: 20)),
             Text("Quantidade Vendida: ${produto.vendas}",
                 style: const TextStyle(fontSize: 20)),
+            Text("Unidade: ${produto.unidade}",
+                style: const TextStyle(fontSize: 20)),
             Text(
                 "Lucro Esperado: ${produto.vendas * produto.preco - produto.valorCompraTotal}",
                 style: const TextStyle(fontSize: 20)),

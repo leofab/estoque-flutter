@@ -38,6 +38,19 @@ enum Tipos {
   final Color cor;
 }
 
+enum Unidades {
+  lata350("Lata 350"),
+  lata269("Lata 269"),
+  seissentos("600"),
+  litrao("Litrão"),
+  litro("Litro"),
+  saco("Saco");
+
+  const Unidades(this.unidade);
+  final String unidade;
+  final Color cor = Colors.green;
+}
+
 class _ProdutoInserirState extends State<ProdutoInserir> {
   final key = GlobalKey<FormState>();
   final myControllerNome = TextEditingController();
@@ -140,11 +153,27 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                         value!.isEmpty ? "Campo obrigatório" : null,
                   ),
                   const SizedBox(height: 10),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Unidade"),
+                  DropdownMenu<Unidades>(
+                    initialSelection: Unidades.lata350,
                     controller: myControllerUnidade,
-                    validator: (value) =>
-                        value!.isEmpty ? "Campo obrigatório" : null,
+                    requestFocusOnTap: true,
+                    label: const Text("Unidade"),
+                    onSelected: (Unidades? cor) {
+                      setState(() {
+                        myControllerUnidade.text = cor!.unidade;
+                      });
+                    },
+                    dropdownMenuEntries: Unidades.values
+                        .map<DropdownMenuEntry<Unidades>>((Unidades unidade) {
+                      return DropdownMenuEntry<Unidades>(
+                        value: unidade,
+                        label: unidade.name,
+                        enabled: unidade.name != 'Grey',
+                        style: MenuItemButton.styleFrom(
+                          foregroundColor: unidade.cor,
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ],
               ),

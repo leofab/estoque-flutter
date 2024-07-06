@@ -11,7 +11,7 @@ class ProdutosProvider extends ChangeNotifier {
       valorCompraTotal: 50.00,
       preco: 10.00,
       quantidade: 10,
-      unidade: 'L',
+      unidade: Unidades.litro.name,
     ),
     Produto(
       id: 2,
@@ -20,7 +20,7 @@ class ProdutosProvider extends ChangeNotifier {
       valorCompraTotal: 25.00,
       preco: 5.00,
       quantidade: 5,
-      unidade: 'L',
+      unidade: Unidades.litro.name,
     ),
     Produto(
       id: 3,
@@ -29,7 +29,7 @@ class ProdutosProvider extends ChangeNotifier {
       valorCompraTotal: 75.00,
       preco: 15.00,
       quantidade: 15,
-      unidade: 'L',
+      unidade: Unidades.litro.name,
     ),
     Produto(
       id: 4,
@@ -38,7 +38,7 @@ class ProdutosProvider extends ChangeNotifier {
       valorCompraTotal: 100.00,
       preco: 20.00,
       quantidade: 20,
-      unidade: 'L',
+      unidade: Unidades.litro.name,
     ),
     Produto(
       id: 5,
@@ -47,7 +47,7 @@ class ProdutosProvider extends ChangeNotifier {
       valorCompraTotal: 10.00,
       preco: 2.00,
       quantidade: 20,
-      unidade: 'L',
+      unidade: Unidades.lata350.name,
     ),
     Produto(
       id: 6,
@@ -56,7 +56,7 @@ class ProdutosProvider extends ChangeNotifier {
       valorCompraTotal: 1.00,
       preco: 1.00,
       quantidade: 5,
-      unidade: 'kg',
+      unidade: Unidades.saco.name,
     ),
     Produto(
       id: 7,
@@ -65,7 +65,7 @@ class ProdutosProvider extends ChangeNotifier {
       valorCompraTotal: 7.00,
       preco: 7.00,
       quantidade: 7,
-      unidade: 'kg',
+      unidade: Unidades.saco.name,
     ),
     Produto(
       id: 8,
@@ -74,7 +74,7 @@ class ProdutosProvider extends ChangeNotifier {
       valorCompraTotal: 8.00,
       preco: 8.00,
       quantidade: 8,
-      unidade: 'L',
+      unidade: Unidades.litro.name,
     ),
     Produto(
       id: 9,
@@ -83,7 +83,7 @@ class ProdutosProvider extends ChangeNotifier {
       valorCompraTotal: 3.00,
       preco: 3.00,
       quantidade: 3,
-      unidade: 'L',
+      unidade: Unidades.litro.name,
     ),
     Produto(
       id: 10,
@@ -92,7 +92,7 @@ class ProdutosProvider extends ChangeNotifier {
       valorCompraTotal: 4.00,
       preco: 4.00,
       quantidade: 4,
-      unidade: 'L',
+      unidade: Unidades.litro.name,
     ),
     Produto(
       id: 11,
@@ -101,7 +101,7 @@ class ProdutosProvider extends ChangeNotifier {
       valorCompraTotal: 5.00,
       preco: 5.00,
       quantidade: 5,
-      unidade: 'L',
+      unidade: Unidades.litro.name,
     ),
     Produto(
       id: 12,
@@ -110,7 +110,7 @@ class ProdutosProvider extends ChangeNotifier {
       valorCompraTotal: 6.00,
       preco: 6.00,
       quantidade: 6,
-      unidade: 'L',
+      unidade: Unidades.litro.name,
     ),
     Produto(
       id: 13,
@@ -119,7 +119,7 @@ class ProdutosProvider extends ChangeNotifier {
       valorCompraTotal: 7.00,
       preco: 7.00,
       quantidade: 7,
-      unidade: 'L',
+      unidade: Unidades.lata350.name,
     ),
     Produto(
       id: 14,
@@ -128,7 +128,7 @@ class ProdutosProvider extends ChangeNotifier {
       valorCompraTotal: 8.00,
       preco: 8.00,
       quantidade: 8,
-      unidade: 'L',
+      unidade: Unidades.lata350.name,
     ),
   ];
 
@@ -169,13 +169,15 @@ class ProdutosProvider extends ChangeNotifier {
   }
 
   void adicionarProduto(Produto produto) {
-    Produto produtoInserido =
-        _produtos.firstWhere((p) => p.nome == produto.nome, orElse: () {
+    Produto produtoInserido = _produtos.firstWhere(
+        (p) => p.nome == produto.nome && p.unidade == produto.unidade,
+        orElse: () {
       _produtos.add(produto);
       return produto;
     });
     if (produtoInserido != produto) {
       produtoInserido.quantidade += produto.quantidade;
+      produtoInserido.valorCompraTotal += produto.valorCompraTotal;
     }
     notifyListeners();
   }
