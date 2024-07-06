@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'screens/login.dart';
 import 'screens/produtos_lista.dart';
 import 'screens/produto_vendas.dart';
+
 import 'providers/produtos_provider.dart';
 
 Future main() async {
