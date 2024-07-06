@@ -35,6 +35,11 @@ class _VendaState extends State<Venda> {
             const SizedBox(height: 20),
             const Divider(),
             const SizedBox(height: 20),
+            Text("Quantidade Restante: ${widget.produto.quantidade}",
+                style: const TextStyle(fontSize: 20)),
+            const SizedBox(height: 20),
+            const Divider(),
+            const SizedBox(height: 20),
             Text("Preço: ${widget.produto.preco}",
                 style: const TextStyle(fontSize: 20)),
             const SizedBox(height: 20),
@@ -77,6 +82,7 @@ class _VendaState extends State<Venda> {
                   );
                 } else {
                   widget.produto.quantidade -= quantidade;
+                  widget.produto.vendas += quantidade;
                   provider.alterarProduto(widget.produto);
                   Produto produtoVendido = Produto(
                     id: widget.produto.id,
@@ -87,13 +93,9 @@ class _VendaState extends State<Venda> {
                     unidade: widget.produto.unidade,
                     quantidade: quantidade,
                   );
-                  print(provider.produtosVendidos.contains(produtoVendido));
                   provider.venderProduto(produtoVendido);
-                  print(provider.produtosVendidos.contains(produtoVendido));
+                  Navigator.of(context).pop();
                 }
-                print(widget.produto);
-                print(provider.produtos[0]);
-                print(provider.produtosVendidos);
               },
               child: const Text("Vender"),
             ),

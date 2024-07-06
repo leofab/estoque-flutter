@@ -169,7 +169,14 @@ class ProdutosProvider extends ChangeNotifier {
   }
 
   void adicionarProduto(Produto produto) {
-    _produtos.add(produto);
+    Produto produtoInserido =
+        _produtos.firstWhere((p) => p.nome == produto.nome, orElse: () {
+      _produtos.add(produto);
+      return produto;
+    });
+    if (produtoInserido != produto) {
+      produtoInserido.quantidade += produto.quantidade;
+    }
     notifyListeners();
   }
 
