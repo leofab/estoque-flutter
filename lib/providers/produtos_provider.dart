@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:provider/provider.dart';
 import '../models/produto.dart';
@@ -173,17 +176,30 @@ class ProdutosProvider extends ChangeNotifier {
   }
 
   void adicionarProduto(Produto produto) {
-    Produto produtoInserido = _produtos.firstWhere(
-        (p) => p.nome == produto.nome && p.unidade == produto.unidade,
-        orElse: () {
-      _produtos.add(produto);
-      return produto;
+    http
+        .post(Uri.https('${dotenv.env['url']}', '/produtos.json'),
+            body: json.encode({
+              'id': produto.id,
+              'tipo': produto.tipo,
+              'nome': produto.nome,
+              'valorCompraTotal': produto.valorCompraTotal,
+              'preco': produto.preco,
+              'quantidade': produto.quantidade,
+              'unidade': produto.unidade,
+            }))
+        .then((response) {
+      Produto produtoInserido = _produtos.firstWhere(
+          (p) => p.nome == produto.nome && p.unidade == produto.unidade,
+          orElse: () {
+        _produtos.add(produto);
+        return produto;
+      });
+      if (produtoInserido != produto) {
+        produtoInserido.quantidade += produto.quantidade;
+        produtoInserido.valorCompraTotal += produto.valorCompraTotal;
+      }
+      notifyListeners();
     });
-    if (produtoInserido != produto) {
-      produtoInserido.quantidade += produto.quantidade;
-      produtoInserido.valorCompraTotal += produto.valorCompraTotal;
-    }
-    notifyListeners();
   }
 
   List<Produto> filtrarPorTipo(String tipo) {
