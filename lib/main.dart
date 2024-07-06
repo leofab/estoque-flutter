@@ -20,11 +20,15 @@ class MainApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => ProdutosProvider()),
       ],
-      child: MaterialApp(title: 'Estoque App', initialRoute: '/login', routes: {
-        '/login': (context) => const LoginScreen(),
-        '/produtos': (context) => const ProdutosLista(),
-        '/vendas': (context) => const ProdutoVendas(),
-      }),
+      child: MaterialApp(
+          title: 'Estoque App',
+          debugShowCheckedModeBanner: false,
+          initialRoute: '/login',
+          routes: {
+            '/login': (context) => const LoginScreen(),
+            '/produtos': (context) => const ProdutosLista(),
+            '/vendas': (context) => const ProdutoVendas(),
+          }),
     );
   }
 }

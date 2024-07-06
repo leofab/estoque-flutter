@@ -117,6 +117,13 @@ class _ProdutoVendasState extends State<ProdutoVendas> {
                 fontSize: 20,
               ),
             ),
+            Text(
+              "Lucro Esperado: ${(provider.valorVendaTotal() - provider.valorCompraTotal()).toString()}",
+              style: const TextStyle(
+                color: Colors.amber,
+                fontSize: 20,
+              ),
+            ),
           ],
         ),
       ),
