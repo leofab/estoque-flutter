@@ -4,7 +4,8 @@ import 'package:provider/provider.dart';
 import 'screens/login.dart';
 import 'screens/produtos_lista.dart';
 import 'screens/produto_vendas.dart';
-import './providers/produtos_provider.dart ';
+
+import 'providers/produtos_provider.dart';
 
 Future main() async {
   runApp(const MainApp());
@@ -15,8 +16,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => Produtos(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ProdutosProvider()),
+      ],
       child: MaterialApp(title: 'Estoque App', initialRoute: '/login', routes: {
         '/login': (context) => const LoginScreen(),
         '/produtos': (context) => const ProdutosLista(),

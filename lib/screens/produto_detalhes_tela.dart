@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../providers/produtos_provider.dart';
+import '../models/produto.dart';
+import 'venda.dart';
+
 class ProdutoDetalhes extends StatefulWidget {
+  final Produto produto;
   final String id;
   final String tipo;
   final String nome;
@@ -8,8 +13,13 @@ class ProdutoDetalhes extends StatefulWidget {
   final String quantidade;
 
   const ProdutoDetalhes(
-      this.id, this.tipo, this.nome, this.preco, this.quantidade,
-      {super.key});
+      {super.key,
+      required this.produto,
+      required this.id,
+      required this.tipo,
+      required this.nome,
+      required this.preco,
+      required this.quantidade});
 
   @override
   State<ProdutoDetalhes> createState() => _ProdutoDetalhesState();
@@ -18,6 +28,9 @@ class ProdutoDetalhes extends StatefulWidget {
 class _ProdutoDetalhesState extends State<ProdutoDetalhes> {
   @override
   Widget build(BuildContext context) {
+    ProdutosProvider provider = ProdutosProvider.of(context);
+    Produto produto = provider.produtos
+        .firstWhere((element) => element.id == widget.produto.id);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.tipo, style: const TextStyle(color: Colors.black)),
@@ -32,19 +45,31 @@ class _ProdutoDetalhesState extends State<ProdutoDetalhes> {
             mainAxisSpacing: 20,
           ),
           children: [
-            Text("Descrição: ${widget.tipo}",
+            Text("Descrição: ${produto.tipo}",
                 style: const TextStyle(fontSize: 20)),
-            Text("Nome: ${widget.nome}", style: const TextStyle(fontSize: 20)),
-            Text("Preço: ${widget.preco}",
+            Text("Nome: ${produto.nome}", style: const TextStyle(fontSize: 20)),
+            Text("Preço: ${produto.preco}",
                 style: const TextStyle(fontSize: 20)),
-            Text("Quantidade: ${widget.quantidade}",
+            Text("Valor Compra: ${produto.valorCompraTotal}",
+                style: const TextStyle(fontSize: 20)),
+            Text("Quantidade Restante: ${produto.quantidade}",
+                style: const TextStyle(fontSize: 20)),
+            Text("Quantidade Vendida: ${produto.vendas}",
+                style: const TextStyle(fontSize: 20)),
+            Text("Unidade: ${produto.unidade}",
+                style: const TextStyle(fontSize: 20)),
+            Text(
+                "Lucro Esperado: ${produto.vendas * produto.preco - produto.valorCompraTotal}",
                 style: const TextStyle(fontSize: 20)),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pop(context);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Venda(produto: widget.produto)));
         },
         child: const Text("Venda"),
       ),
