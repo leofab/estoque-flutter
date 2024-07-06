@@ -9,137 +9,190 @@ import '../models/produto.dart';
 
 class ProdutosProvider extends ChangeNotifier {
   List<Produto> _produtos = [
-    Produto(
-      id: 1,
-      tipo: Tipos.vinho.name,
-      nome: 'Vinho Sao Francisco',
-      valorCompraTotal: 50.00,
-      preco: 10.00,
-      quantidade: 10,
-      unidade: Unidades.litro.name,
-    ),
-    Produto(
-      id: 2,
-      tipo: Tipos.cachaca.name,
-      nome: 'Cachaça Ypioca',
-      valorCompraTotal: 25.00,
-      preco: 5.00,
-      quantidade: 5,
-      unidade: Unidades.litro.name,
-    ),
-    Produto(
-      id: 3,
-      tipo: Tipos.vodka.name,
-      nome: 'Vodka Smirnoff',
-      valorCompraTotal: 75.00,
-      preco: 15.00,
-      quantidade: 15,
-      unidade: Unidades.litro.name,
-    ),
-    Produto(
-      id: 4,
-      tipo: Tipos.whisky.name,
-      nome: 'Whisky Johnnie Walker',
-      valorCompraTotal: 100.00,
-      preco: 20.00,
-      quantidade: 20,
-      unidade: Unidades.litro.name,
-    ),
-    Produto(
-      id: 5,
-      tipo: Tipos.cerveja.name,
-      nome: 'Cerveja Skol',
-      valorCompraTotal: 10.00,
-      preco: 2.00,
-      quantidade: 20,
-      unidade: Unidades.lata350.name,
-    ),
-    Produto(
-      id: 6,
-      tipo: Tipos.gelo.name,
-      nome: 'Gelo',
-      valorCompraTotal: 1.00,
-      preco: 1.00,
-      quantidade: 5,
-      unidade: Unidades.saco.name,
-    ),
-    Produto(
-      id: 7,
-      tipo: Tipos.outros.name,
-      nome: 'Amendoin',
-      valorCompraTotal: 7.00,
-      preco: 7.00,
-      quantidade: 7,
-      unidade: Unidades.saco.name,
-    ),
-    Produto(
-      id: 8,
-      tipo: Tipos.rum.name,
-      nome: 'Rum Motilla',
-      valorCompraTotal: 8.00,
-      preco: 8.00,
-      quantidade: 8,
-      unidade: Unidades.litro.name,
-    ),
-    Produto(
-      id: 9,
-      tipo: Tipos.semAlcool.name,
-      nome: 'Refrigerante',
-      valorCompraTotal: 3.00,
-      preco: 3.00,
-      quantidade: 3,
-      unidade: Unidades.litro.name,
-    ),
-    Produto(
-      id: 10,
-      tipo: Tipos.vinho.name,
-      nome: 'Vinho Aurora',
-      valorCompraTotal: 4.00,
-      preco: 4.00,
-      quantidade: 4,
-      unidade: Unidades.litro.name,
-    ),
-    Produto(
-      id: 11,
-      tipo: Tipos.tequila.name,
-      nome: 'Tequila Jose Cuervo',
-      valorCompraTotal: 5.00,
-      preco: 5.00,
-      quantidade: 5,
-      unidade: Unidades.litro.name,
-    ),
-    Produto(
-      id: 12,
-      tipo: Tipos.absinto.name,
-      nome: 'Absinto',
-      valorCompraTotal: 6.00,
-      preco: 6.00,
-      quantidade: 6,
-      unidade: Unidades.litro.name,
-    ),
-    Produto(
-      id: 13,
-      tipo: Tipos.cerveja.name,
-      nome: 'Cerveja Heineken',
-      valorCompraTotal: 7.00,
-      preco: 7.00,
-      quantidade: 7,
-      unidade: Unidades.lata350.name,
-    ),
-    Produto(
-      id: 14,
-      tipo: Tipos.cerveja.name,
-      nome: 'Cerveja Budweiser',
-      valorCompraTotal: 8.00,
-      preco: 8.00,
-      quantidade: 8,
-      unidade: Unidades.lata350.name,
-    ),
+    // Produto(
+    //   id: 1,
+    //   tipo: Tipos.vinho.name,
+    //   nome: 'Vinho Sao Francisco',
+    //   valorCompraTotal: 50.00,
+    //   preco: 10.00,
+    //   quantidade: 10,
+    //   unidade: Unidades.litro.name,
+    // ),
+    // Produto(
+    //   id: 2,
+    //   tipo: Tipos.cachaca.name,
+    //   nome: 'Cachaça Ypioca',
+    //   valorCompraTotal: 25.00,
+    //   preco: 5.00,
+    //   quantidade: 5,
+    //   unidade: Unidades.litro.name,
+    // ),
+    // Produto(
+    //   id: 3,
+    //   tipo: Tipos.vodka.name,
+    //   nome: 'Vodka Smirnoff',
+    //   valorCompraTotal: 75.00,
+    //   preco: 15.00,
+    //   quantidade: 15,
+    //   unidade: Unidades.litro.name,
+    // ),
+    // Produto(
+    //   id: 4,
+    //   tipo: Tipos.whisky.name,
+    //   nome: 'Whisky Johnnie Walker',
+    //   valorCompraTotal: 100.00,
+    //   preco: 20.00,
+    //   quantidade: 20,
+    //   unidade: Unidades.litro.name,
+    // ),
+    // Produto(
+    //   id: 5,
+    //   tipo: Tipos.cerveja.name,
+    //   nome: 'Cerveja Skol',
+    //   valorCompraTotal: 10.00,
+    //   preco: 2.00,
+    //   quantidade: 20,
+    //   unidade: Unidades.lata350.name,
+    // ),
+    // Produto(
+    //   id: 6,
+    //   tipo: Tipos.gelo.name,
+    //   nome: 'Gelo',
+    //   valorCompraTotal: 1.00,
+    //   preco: 1.00,
+    //   quantidade: 5,
+    //   unidade: Unidades.saco.name,
+    // ),
+    // Produto(
+    //   id: 7,
+    //   tipo: Tipos.outros.name,
+    //   nome: 'Amendoin',
+    //   valorCompraTotal: 7.00,
+    //   preco: 7.00,
+    //   quantidade: 7,
+    //   unidade: Unidades.saco.name,
+    // ),
+    // Produto(
+    //   id: 8,
+    //   tipo: Tipos.rum.name,
+    //   nome: 'Rum Motilla',
+    //   valorCompraTotal: 8.00,
+    //   preco: 8.00,
+    //   quantidade: 8,
+    //   unidade: Unidades.litro.name,
+    // ),
+    // Produto(
+    //   id: 9,
+    //   tipo: Tipos.semAlcool.name,
+    //   nome: 'Refrigerante',
+    //   valorCompraTotal: 3.00,
+    //   preco: 3.00,
+    //   quantidade: 3,
+    //   unidade: Unidades.litro.name,
+    // ),
+    // Produto(
+    //   id: 10,
+    //   tipo: Tipos.vinho.name,
+    //   nome: 'Vinho Aurora',
+    //   valorCompraTotal: 4.00,
+    //   preco: 4.00,
+    //   quantidade: 4,
+    //   unidade: Unidades.litro.name,
+    // ),
+    // Produto(
+    //   id: 11,
+    //   tipo: Tipos.tequila.name,
+    //   nome: 'Tequila Jose Cuervo',
+    //   valorCompraTotal: 5.00,
+    //   preco: 5.00,
+    //   quantidade: 5,
+    //   unidade: Unidades.litro.name,
+    // ),
+    // Produto(
+    //   id: 12,
+    //   tipo: Tipos.absinto.name,
+    //   nome: 'Absinto',
+    //   valorCompraTotal: 6.00,
+    //   preco: 6.00,
+    //   quantidade: 6,
+    //   unidade: Unidades.litro.name,
+    // ),
+    // Produto(
+    //   id: 13,
+    //   tipo: Tipos.cerveja.name,
+    //   nome: 'Cerveja Heineken',
+    //   valorCompraTotal: 7.00,
+    //   preco: 7.00,
+    //   quantidade: 7,
+    //   unidade: Unidades.lata350.name,
+    // ),
+    // Produto(
+    //   id: 14,
+    //   tipo: Tipos.cerveja.name,
+    //   nome: 'Cerveja Budweiser',
+    //   valorCompraTotal: 8.00,
+    //   preco: 8.00,
+    //   quantidade: 8,
+    //   unidade: Unidades.lata350.name,
+    // ),
   ];
 
   List<Produto> produtosFiltro = [];
 
   List<Produto> _produtosVendidos = [];
+
+  Future<void> fetchAll() {
+    var url = Uri.parse('${dotenv.env['url']}/produtos.json');
+    return http.get(url).then((response) {
+      final data = json.decode(response.body) as Map<String, dynamic>;
+      if (data.length == _produtos.length) {
+        return;
+      } else {
+        List<Produto> produtos = [];
+        data.values.forEach((value) {
+          produtos.add(Produto(
+            id: value['id'],
+            tipo: value['tipo'],
+            nome: value['nome'],
+            valorCompraTotal: value['valorCompraTotal'],
+            preco: value['preco'],
+            quantidade: value['quantidade'],
+            unidade: value['unidade'],
+          ));
+        });
+        _produtos = produtos;
+        notifyListeners();
+      }
+    });
+  }
+
+  Future<void> adicionarProduto(Produto produto) {
+    var url = Uri.parse('${dotenv.env['url']}/produtos.json');
+    return http
+        .post(url,
+            body: json.encode({
+              'id': produto.id,
+              'tipo': produto.tipo,
+              'nome': produto.nome,
+              'valorCompraTotal': produto.valorCompraTotal,
+              'preco': produto.preco,
+              'quantidade': produto.quantidade,
+              'unidade': produto.unidade,
+            }))
+        .then((response) {
+      Produto produtoInserido = _produtos.firstWhere(
+          (p) => p.nome == produto.nome && p.unidade == produto.unidade,
+          orElse: () {
+        _produtos.add(produto);
+        return produto;
+      });
+      if (produtoInserido != produto) {
+        produtoInserido.quantidade += produto.quantidade;
+        produtoInserido.valorCompraTotal += produto.valorCompraTotal;
+      }
+      notifyListeners();
+    });
+  }
 
   double valorCompraTotal() {
     double total = 0;
@@ -173,34 +226,6 @@ class ProdutosProvider extends ChangeNotifier {
   set produtos(List<Produto> produtos) {
     _produtos = produtos;
     notifyListeners();
-  }
-
-  void adicionarProduto(Produto produto) {
-    var url = Uri.parse('${dotenv.env['url']}/produtos.json');
-    http
-        .post(url,
-            body: json.encode({
-              'id': produto.id,
-              'tipo': produto.tipo,
-              'nome': produto.nome,
-              'valorCompraTotal': produto.valorCompraTotal,
-              'preco': produto.preco,
-              'quantidade': produto.quantidade,
-              'unidade': produto.unidade,
-            }))
-        .then((response) {
-      Produto produtoInserido = _produtos.firstWhere(
-          (p) => p.nome == produto.nome && p.unidade == produto.unidade,
-          orElse: () {
-        _produtos.add(produto);
-        return produto;
-      });
-      if (produtoInserido != produto) {
-        produtoInserido.quantidade += produto.quantidade;
-        produtoInserido.valorCompraTotal += produto.valorCompraTotal;
-      }
-      notifyListeners();
-    });
   }
 
   List<Produto> filtrarPorTipo(String tipo) {
