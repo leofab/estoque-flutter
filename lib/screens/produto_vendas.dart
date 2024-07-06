@@ -98,6 +98,28 @@ class _ProdutoVendasState extends State<ProdutoVendas> {
           ],
         ),
       ),
+      bottomNavigationBar: BottomAppBar(
+        color: Colors.black45,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              "Total de Vendas: ${(provider.valorVendaTotal()).toString()}",
+              style: const TextStyle(
+                color: Colors.amber,
+                fontSize: 20,
+              ),
+            ),
+            Text(
+              "Total Valor Compra: ${(provider.valorCompraTotal()).toString()}",
+              style: const TextStyle(
+                color: Colors.amber,
+                fontSize: 20,
+              ),
+            ),
+          ],
+        ),
+      ),
       // floatingActionButton: Padding(
       //   padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 0),
       //   child: Column(

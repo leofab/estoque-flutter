@@ -137,9 +137,11 @@ class ProdutosProvider extends ChangeNotifier {
   List<Produto> _produtosVendidos = [];
 
   double valorCompraTotal() {
-    return _produtos.fold(0, (total, produto) {
-      return total + produto.valorCompraTotal;
-    });
+    double total = 0;
+    for (int i = 0; i < _produtos.length; i++) {
+      total += _produtos[i].valorCompraTotal;
+    }
+    return total;
   }
 
   double valorVendaTotal() {
