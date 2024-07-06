@@ -88,7 +88,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
               title: const Text("Vendas / Caixa"),
               onTap: () {
                 if (ModalRoute.of(context)!.settings.name != "/vendas") {
-                  Navigator.of(context).pushNamed("/vendas");
+                  Navigator.of(context).pushReplacementNamed("/vendas");
                 } else {
                   Navigator.pop(context);
                 }
