@@ -176,8 +176,10 @@ class ProdutosProvider extends ChangeNotifier {
   }
 
   void adicionarProduto(Produto produto) {
+    var url = Uri.parse(
+        'https://estoque-app-aa7a9-default-rtdb.firebaseio.com/produtos.json');
     http
-        .post(Uri.https('${dotenv.env['url']}', '/produtos.json'),
+        .post(url,
             body: json.encode({
               'id': produto.id,
               'tipo': produto.tipo,
