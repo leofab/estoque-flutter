@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../providers/produtos_provider.dart';
 import '../models/produto.dart';
 import 'venda.dart';
 
@@ -27,6 +28,9 @@ class ProdutoDetalhes extends StatefulWidget {
 class _ProdutoDetalhesState extends State<ProdutoDetalhes> {
   @override
   Widget build(BuildContext context) {
+    ProdutosProvider provider = ProdutosProvider.of(context);
+    Produto produto = provider.produtos
+        .firstWhere((element) => element.id == widget.produto.id);
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.tipo, style: const TextStyle(color: Colors.black)),
@@ -41,12 +45,12 @@ class _ProdutoDetalhesState extends State<ProdutoDetalhes> {
             mainAxisSpacing: 20,
           ),
           children: [
-            Text("Descrição: ${widget.tipo}",
+            Text("Descrição: ${produto.tipo}",
                 style: const TextStyle(fontSize: 20)),
-            Text("Nome: ${widget.nome}", style: const TextStyle(fontSize: 20)),
-            Text("Preço: ${widget.preco}",
+            Text("Nome: ${produto.nome}", style: const TextStyle(fontSize: 20)),
+            Text("Preço: ${produto.preco}",
                 style: const TextStyle(fontSize: 20)),
-            Text("Quantidade: ${widget.quantidade}",
+            Text("Quantidade: ${produto.quantidade}",
                 style: const TextStyle(fontSize: 20)),
           ],
         ),

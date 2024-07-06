@@ -134,7 +134,7 @@ class ProdutosProvider extends ChangeNotifier {
 
   List<Produto> produtosFiltro = [];
 
-  List<Produto> produtosVendidos = [];
+  List<Produto> _produtosVendidos = [];
 
   double valorCompraTotal() {
     return _produtos.fold(0, (total, produto) {
@@ -143,7 +143,7 @@ class ProdutosProvider extends ChangeNotifier {
   }
 
   double valorVendaTotal() {
-    return produtosVendidos.fold(0, (total, produto) {
+    return _produtosVendidos.fold(0, (total, produto) {
       return total + produto.preco * produto.quantidade;
     });
   }
@@ -157,6 +157,10 @@ class ProdutosProvider extends ChangeNotifier {
       return produtosFiltro;
     }
     return [..._produtos];
+  }
+
+  List<Produto> get produtosVendidos {
+    return [..._produtosVendidos];
   }
 
   set produtos(List<Produto> produtos) {
@@ -178,6 +182,32 @@ class ProdutosProvider extends ChangeNotifier {
 
   void limparFiltro() {
     produtosFiltro = [];
+    notifyListeners();
+  }
+
+  void venderProduto(Produto produto) {
+    Produto produtoVendido = _produtosVendidos.firstWhere(
+      (p) => p.id == produto.id,
+      orElse: () {
+        _produtosVendidos.add(produto);
+        return produto;
+      },
+    );
+    if (produtoVendido != produto) {
+      produtoVendido.quantidade += produto.quantidade;
+    }
+    notifyListeners();
+  }
+
+  void alterarProduto(Produto produto) {
+    final index = _produtos.indexWhere((p) => p.id == produto.id);
+    _produtos[index] = produto;
+    notifyListeners();
+  }
+
+  void alterarProdutoVendido(Produto produto) {
+    final index = _produtosVendidos.indexWhere((p) => p.id == produto.id);
+    _produtosVendidos[index] = produto;
     notifyListeners();
   }
 

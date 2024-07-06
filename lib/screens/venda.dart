@@ -3,35 +3,97 @@ import 'package:flutter/material.dart';
 import '../providers/produtos_provider.dart';
 import '../models/produto.dart';
 
-class Venda extends StatelessWidget {
+class Venda extends StatefulWidget {
   final Produto produto;
   const Venda({super.key, required this.produto});
 
   @override
+  State<Venda> createState() => _VendaState();
+}
+
+class _VendaState extends State<Venda> {
+  final myControllerQuantidade = TextEditingController();
+  int quantidade = 0;
+
+  @override
+  void dispose() {
+    myControllerQuantidade.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     ProdutosProvider provider = ProdutosProvider.of(context);
-    List<Produto> produtosVendas = provider.produtosVendidos;
     return Scaffold(
       appBar: AppBar(title: const Text("Vendas / Caixa")),
       body: Center(
         child: ListView(
           padding: const EdgeInsets.all(25),
-          children: [
-            Text("Produto: ${produto.nome}",
-                style: const TextStyle(fontSize: 20)),
-            Text("Preço: ${produto.preco}",
-                style: const TextStyle(fontSize: 20)),
-            Text("Quantidade: ${produto.quantidade}",
+          children: <Widget>[
+            Text("Produto: ${widget.produto.nome}",
                 style: const TextStyle(fontSize: 20)),
             const SizedBox(height: 20),
             const Divider(),
             const SizedBox(height: 20),
-            Text("Total: ${produto.preco * produto.quantidade}",
+            Text("Preço: ${widget.produto.preco}",
+                style: const TextStyle(fontSize: 20)),
+            const SizedBox(height: 20),
+            const Divider(),
+            const SizedBox(height: 20),
+            TextFormField(
+              onChanged: (value) => setState(() {
+                quantidade = int.parse(value);
+              }),
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(labelText: "Quantidade"),
+              controller: myControllerQuantidade,
+              validator: (value) => value!.isEmpty ? "Campo obrigatório" : null,
+            ),
+            const SizedBox(height: 20),
+            const Divider(),
+            const SizedBox(height: 20),
+            Text("Total: ${widget.produto.preco * quantidade}",
                 style: const TextStyle(fontSize: 20)),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Navigator.pop(context);
+                if (widget.produto.quantidade < quantidade) {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return const AlertDialog(
+                        title: Text("Quantidade de Produtos Insuficiente!"),
+                      );
+                    },
+                  );
+                } else if (quantidade == 0) {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return const AlertDialog(
+                        title: Text("Quantidade de Produtos Inválida!"),
+                      );
+                    },
+                  );
+                } else {
+                  widget.produto.quantidade -= quantidade;
+                  provider.alterarProduto(widget.produto);
+                  Produto produtoVendido = Produto(
+                    id: widget.produto.id,
+                    tipo: widget.produto.tipo,
+                    nome: widget.produto.nome,
+                    valorCompraTotal: widget.produto.valorCompraTotal,
+                    preco: widget.produto.preco,
+                    unidade: widget.produto.unidade,
+                    quantidade: quantidade,
+                  );
+                  print(provider.produtosVendidos.contains(produtoVendido));
+                  provider.venderProduto(produtoVendido);
+                  print(provider.produtosVendidos.contains(produtoVendido));
+                }
+                print(widget.produto);
+                print(provider.produtos[0]);
+                print(provider.produtosVendidos);
               },
               child: const Text("Vender"),
             ),
