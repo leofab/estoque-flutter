@@ -60,6 +60,8 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
   final myControllerQuantidade = TextEditingController();
   final myControllerUnidade = TextEditingController();
 
+  var isLoaded = false;
+
   @override
   void dispose() {
     myControllerNome.dispose();
@@ -84,7 +86,6 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
 
   @override
   Widget build(BuildContext context) {
-
     final provider = ProdutosProvider.of(context);
     int id = provider.produtos.length + 1;
     return Scaffold(
@@ -92,116 +93,130 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
         title: const Text("Inserir Produto"),
         backgroundColor: Colors.amber[100],
       ),
-      body: ListView(
-        physics: const ScrollPhysics(),
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Form(
-              key: key,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Nome"),
-                    controller: myControllerNome,
-                    validator: (value) =>
-                        value!.isEmpty ? "Campo obrigatório" : null,
-                  ),
-                  const SizedBox(height: 20),
-                  DropdownMenu<Tipos>(
-                    initialSelection: Tipos.absinto,
-                    controller: myControllerTipo,
-                    requestFocusOnTap: true,
-                    label: const Text("Tipo"),
-                    onSelected: (Tipos? cor) {
-                      setState(() {
-                        myControllerTipo.text = cor!.tipo;
-                      });
-                    },
-                    dropdownMenuEntries: Tipos.values
-                        .map<DropdownMenuEntry<Tipos>>((Tipos tipo) {
-                      return DropdownMenuEntry<Tipos>(
-                        value: tipo,
-                        label: tipo.name,
-                        enabled: tipo.name != 'Grey',
-                        style: MenuItemButton.styleFrom(
-                          foregroundColor: tipo.cor,
+      body: isLoaded
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView(
+              physics: const ScrollPhysics(),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Form(
+                    key: key,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        TextFormField(
+                          decoration: const InputDecoration(labelText: "Nome"),
+                          controller: myControllerNome,
+                          validator: (value) =>
+                              value!.isEmpty ? "Campo obrigatório" : null,
                         ),
-                      );
-                    }).toList(),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    decoration: const InputDecoration(
-                        labelText: "Preço de Compra Total"),
-                    controller: myControllerPrecoTotal,
-                    validator: (value) =>
-                        value!.isEmpty ? "Campo obrigatório" : null,
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Preço"),
-                    controller: myControllerPreco,
-                    validator: (value) =>
-                        value!.isEmpty ? "Campo obrigatório" : null,
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
-                    decoration: const InputDecoration(labelText: "Quantidade"),
-                    controller: myControllerQuantidade,
-                    validator: (value) =>
-                        value!.isEmpty ? "Campo obrigatório" : null,
-                  ),
-                  const SizedBox(height: 10),
-                  DropdownMenu<Unidades>(
-                    initialSelection: Unidades.lata350,
-                    controller: myControllerUnidade,
-                    requestFocusOnTap: true,
-                    label: const Text("Unidade"),
-                    onSelected: (Unidades? cor) {
-                      setState(() {
-                        myControllerUnidade.text = cor!.unidade;
-                      });
-                    },
-                    dropdownMenuEntries: Unidades.values
-                        .map<DropdownMenuEntry<Unidades>>((Unidades unidade) {
-                      return DropdownMenuEntry<Unidades>(
-                        value: unidade,
-                        label: unidade.name,
-                        enabled: unidade.name != 'Grey',
-                        style: MenuItemButton.styleFrom(
-                          foregroundColor: unidade.cor,
+                        const SizedBox(height: 20),
+                        DropdownMenu<Tipos>(
+                          initialSelection: Tipos.absinto,
+                          controller: myControllerTipo,
+                          requestFocusOnTap: true,
+                          label: const Text("Tipo"),
+                          onSelected: (Tipos? cor) {
+                            setState(() {
+                              myControllerTipo.text = cor!.tipo;
+                            });
+                          },
+                          dropdownMenuEntries: Tipos.values
+                              .map<DropdownMenuEntry<Tipos>>((Tipos tipo) {
+                            return DropdownMenuEntry<Tipos>(
+                              value: tipo,
+                              label: tipo.name,
+                              enabled: tipo.name != 'Grey',
+                              style: MenuItemButton.styleFrom(
+                                foregroundColor: tipo.cor,
+                              ),
+                            );
+                          }).toList(),
                         ),
-                      );
-                    }).toList(),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          decoration: const InputDecoration(
+                              labelText: "Preço de Compra Total"),
+                          controller: myControllerPrecoTotal,
+                          validator: (value) =>
+                              value!.isEmpty ? "Campo obrigatório" : null,
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          decoration: const InputDecoration(labelText: "Preço"),
+                          controller: myControllerPreco,
+                          validator: (value) =>
+                              value!.isEmpty ? "Campo obrigatório" : null,
+                        ),
+                        const SizedBox(height: 10),
+                        TextFormField(
+                          decoration:
+                              const InputDecoration(labelText: "Quantidade"),
+                          controller: myControllerQuantidade,
+                          validator: (value) =>
+                              value!.isEmpty ? "Campo obrigatório" : null,
+                        ),
+                        const SizedBox(height: 10),
+                        DropdownMenu<Unidades>(
+                          initialSelection: Unidades.lata350,
+                          controller: myControllerUnidade,
+                          requestFocusOnTap: true,
+                          label: const Text("Unidade"),
+                          onSelected: (Unidades? cor) {
+                            setState(() {
+                              myControllerUnidade.text = cor!.unidade;
+                            });
+                          },
+                          dropdownMenuEntries: Unidades.values
+                              .map<DropdownMenuEntry<Unidades>>(
+                                  (Unidades unidade) {
+                            return DropdownMenuEntry<Unidades>(
+                              value: unidade,
+                              label: unidade.name,
+                              enabled: unidade.name != 'Grey',
+                              style: MenuItemButton.styleFrom(
+                                foregroundColor: unidade.cor,
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (key.currentState!.validate()) {
+                      setState(() {
+                        isLoaded = true;
+                      });
+                      Produto produto = Produto(
+                        id: id,
+                        tipo: myControllerTipo.text.toLowerCase(),
+                        nome: myControllerNome.text,
+                        valorCompraTotal:
+                            double.parse(myControllerPrecoTotal.text),
+                        preco: double.parse(myControllerPreco.text),
+                        quantidade: int.parse(myControllerQuantidade.text),
+                        unidade: myControllerUnidade.text,
+                      );
+                      provider.adicionarProduto(produto).then((_) {
+                        setState(() {
+                          isLoaded = false;
+                        });
+                        Navigator.of(context).pop();
+                        alerta(context);
+                      });
+                    }
+                  },
+                  child: const Text("Inserir"),
+                ),
+                const SizedBox(height: 10),
+              ],
             ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (key.currentState!.validate()) {
-                Produto produto = Produto(
-                  id: id,
-                  tipo: myControllerTipo.text.toLowerCase(),
-                  nome: myControllerNome.text,
-                  valorCompraTotal: double.parse(myControllerPrecoTotal.text),
-                  preco: double.parse(myControllerPreco.text),
-                  quantidade: int.parse(myControllerQuantidade.text),
-                  unidade: myControllerUnidade.text,
-                );
-                provider.adicionarProduto(produto);
-                Navigator.of(context).pop();
-                alerta(context);
-              }
-            },
-            child: const Text("Inserir"),
-          ),
-          const SizedBox(height: 10),
-        ],
-      ),
     );
   }
 }

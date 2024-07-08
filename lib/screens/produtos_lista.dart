@@ -17,7 +17,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
   @override
   Widget build(BuildContext context) {
     ProdutosProvider provider = ProdutosProvider.of(context);
-
+    provider.fetchAll();
     List<ProdutoItem> produtos = provider.produtos
         .map((produto) => ProdutoItem(
               produto: produto,
