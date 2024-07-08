@@ -1,8 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:path_provider/path_provider.dart' as syspaths;
+import 'package:path/path.dart' as path;
 
 import 'package:provider/provider.dart';
 import '../models/produto.dart';
@@ -141,9 +144,13 @@ class ProdutosProvider extends ChangeNotifier {
 
   List<Produto> _produtosVendidos = [];
 
-  Future<void> fetchAll() {
+  Future<void> fetchAll() async {
+    final appDir = await syspaths.getApplicationDocumentsDirectory();
+    final fileName = path.basename(path.join(appDir.path, 'produtos.json'));
     var url = Uri.parse('${dotenv.env['url']}/produtos.json');
     return http.get(url).then((response) {
+      File(fileName).writeAsString(response.body);
+      print('Produtos salvos em: ${appDir.path} as $fileName');
       final data = json.decode(response.body) as Map<String, dynamic>;
       if (data.length == _produtos.length) {
         return;
@@ -166,7 +173,7 @@ class ProdutosProvider extends ChangeNotifier {
     });
   }
 
-  Future<void> adicionarProduto(Produto produto) {
+  Future<void> adicionarProduto(Produto produto) async {
     var url = Uri.parse('${dotenv.env['url']}/produtos.json');
     return http
         .post(url,
