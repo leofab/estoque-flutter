@@ -1,5 +1,9 @@
+import 'dart:io' as io;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:sqlite3/sqlite3.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'screens/login.dart';
@@ -7,9 +11,16 @@ import 'screens/produtos_lista.dart';
 import 'screens/produto_vendas.dart';
 
 import 'providers/produtos_provider.dart';
+import './helpers/database.dart';
 
 Future main() async {
   await dotenv.load(fileName: ".env");
+  if (io.Platform.isWindows || io.Platform.isLinux) {
+    databaseFactory = databaseFactoryFfi;
+  } else {
+    WidgetsFlutterBinding.ensureInitialized();
+  }
+  DatabaseHelper().initDatabase();
   runApp(const MainApp());
 }
 

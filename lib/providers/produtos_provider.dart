@@ -9,6 +9,7 @@ import 'package:path/path.dart' as path;
 
 import 'package:provider/provider.dart';
 import '../models/produto.dart';
+import '../helpers/database.dart';
 
 class ProdutosProvider extends ChangeNotifier {
   List<Produto> _produtos = [
@@ -145,12 +146,12 @@ class ProdutosProvider extends ChangeNotifier {
   List<Produto> _produtosVendidos = [];
 
   Future<void> fetchAll() async {
+    String jsonString = '';
     final appDir = await syspaths.getApplicationDocumentsDirectory();
     final fileName = path.basename(path.join(appDir.path, 'produtos.json'));
     var url = Uri.parse('${dotenv.env['url']}/produtos.json');
     return http.get(url).then((response) {
-      File(fileName).writeAsString(response.body);
-      print('Produtos salvos em: ${appDir.path} as $fileName');
+      jsonString = response.body;
       final data = json.decode(response.body) as Map<String, dynamic>;
       if (data.length == _produtos.length) {
         return;
@@ -167,6 +168,7 @@ class ProdutosProvider extends ChangeNotifier {
             unidade: value['unidade'],
           ));
         });
+        File(fileName).writeAsString(jsonString);
         _produtos = produtos;
         notifyListeners();
       }
@@ -191,6 +193,8 @@ class ProdutosProvider extends ChangeNotifier {
           (p) => p.nome == produto.nome && p.unidade == produto.unidade,
           orElse: () {
         _produtos.add(produto);
+        DatabaseHelper().insertDb(produto.toMap());
+        DatabaseHelper().dbToString();
         return produto;
       });
       if (produtoInserido != produto) {
