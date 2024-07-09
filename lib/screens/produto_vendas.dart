@@ -100,28 +100,28 @@ class _ProdutoVendasState extends State<ProdutoVendas> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: Colors.black45,
-        child: Row(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Text(
               "Total de Vendas: ${(provider.valorVendaTotal()).toString()}",
               style: const TextStyle(
                 color: Colors.amber,
-                fontSize: 20,
+                fontSize: 12,
               ),
             ),
             Text(
               "Total Valor Compra: ${(provider.valorCompraTotal()).toString()}",
               style: const TextStyle(
                 color: Colors.amber,
-                fontSize: 20,
+                fontSize: 12,
               ),
             ),
             Text(
               "Lucro Esperado: ${(provider.valorVendaTotal() - provider.valorCompraTotal()).toString()}",
               style: const TextStyle(
                 color: Colors.amber,
-                fontSize: 20,
+                fontSize: 12,
               ),
             ),
           ],

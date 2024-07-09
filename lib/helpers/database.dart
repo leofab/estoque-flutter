@@ -7,14 +7,6 @@ import 'package:path_provider/path_provider.dart';
 
 class DatabaseHelper {
   Future<void> initDatabase() async {
-    if (io.Platform.isWindows || io.Platform.isLinux) {
-      final io.Directory documentsDirectory =
-          await getApplicationDocumentsDirectory();
-      final String dbPath = path.join(documentsDirectory.path, 'produtos.db');
-      var db = await databaseFactory.openDatabase(dbPath);
-      await db.execute(
-          'CREATE TABLE produtos(id INTEGER PRIMARY KEY, tipo TEXT, nome TEXT, valorCompraTotal REAL, preco REAL, quantidade INTEGER, unidade TEXT, vendas INTEGER)');
-    }
     final io.Directory documentsDirectory =
         await getApplicationDocumentsDirectory();
     final String dbPath = path.join(documentsDirectory.path, 'produtos.db');
