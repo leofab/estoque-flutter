@@ -10,6 +10,7 @@ import 'package:path/path.dart' as path;
 import 'package:provider/provider.dart';
 import '../models/produto.dart';
 import '../helpers/database.dart';
+import '../helpers/http.dart';
 
 class ProdutosProvider extends ChangeNotifier {
   List<Produto> _produtos = [
@@ -176,33 +177,21 @@ class ProdutosProvider extends ChangeNotifier {
   }
 
   Future<void> adicionarProduto(Produto produto) async {
-    var url = Uri.parse('${dotenv.env['url']}/produtos.json');
-    return http
-        .post(url,
-            body: json.encode({
-              'id': produto.id,
-              'tipo': produto.tipo,
-              'nome': produto.nome,
-              'valorCompraTotal': produto.valorCompraTotal,
-              'preco': produto.preco,
-              'quantidade': produto.quantidade,
-              'unidade': produto.unidade,
-            }))
-        .then((response) {
-      Produto produtoInserido = _produtos.firstWhere(
-          (p) => p.nome == produto.nome && p.unidade == produto.unidade,
-          orElse: () {
-        _produtos.add(produto);
-        DatabaseHelper().insertDb(produto.toMap());
-        DatabaseHelper().dbToString();
-        return produto;
-      });
-      if (produtoInserido != produto) {
-        produtoInserido.quantidade += produto.quantidade;
-        produtoInserido.valorCompraTotal += produto.valorCompraTotal;
-      }
-      notifyListeners();
+    Produto produtoInserido = _produtos.firstWhere(
+        (p) => p.nome == produto.nome && p.unidade == produto.unidade,
+        orElse: () {
+      _produtos.add(produto);
+      DatabaseHelper().insertDb(produto.toMap());
+      HttpHelper().postHttp(produto);
+      return produto;
     });
+    if (produtoInserido != produto) {
+      produtoInserido.quantidade += produto.quantidade;
+      produtoInserido.valorCompraTotal += produto.valorCompraTotal;
+      DatabaseHelper().alterProductByName(produtoInserido.toMap());
+      HttpHelper().patchHttp(produtoInserido);
+    }
+    notifyListeners();
   }
 
   double valorCompraTotal() {
