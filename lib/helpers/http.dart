@@ -14,7 +14,8 @@ class HttpHelper {
   }
 
   Future<void> postHttp(Produto produto) async {
-    var url = Uri.parse('${dotenv.env['url']}/produtos/${produto.id}.json');
+    var url =
+        Uri.parse('${dotenv.env['url']}/produtos/produto${produto.id}.json');
     return http
         .post(url,
             body: json.encode({
@@ -32,7 +33,8 @@ class HttpHelper {
   }
 
   Future<void> patchHttp(Produto produto) async {
-    var url = Uri.parse('${dotenv.env['url']}/produtos/${produto.id}.json');
+    var url =
+        Uri.parse('${dotenv.env['url']}/produtos/produto${produto.id}.json');
     return http
         .patch(url,
             body: json.encode({
