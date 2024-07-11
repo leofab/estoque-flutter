@@ -153,12 +153,18 @@ class ProdutosProvider extends ChangeNotifier {
     var url = Uri.parse('${dotenv.env['url']}/produtos.json');
     return http.get(url).then((response) {
       jsonString = response.body;
-      final data = json.decode(response.body) as Map<String, dynamic>;
-      if (data.length == _produtos.length) {
+      List<dynamic> preData = json.decode(jsonString).values.toList();
+      final data = <String, dynamic>{};
+      for (var value in preData) {
+        data.addEntries(value.entries as Iterable<MapEntry<String, dynamic>>);
+      }
+
+      final dataMap = data as Map<String, dynamic>;
+      if (dataMap.length == _produtos.length) {
         return;
       } else {
         List<Produto> produtos = [];
-        data.values.forEach((value) {
+        dataMap.values.forEach((value) {
           produtos.add(Produto(
             id: value['id'],
             tipo: value['tipo'],
