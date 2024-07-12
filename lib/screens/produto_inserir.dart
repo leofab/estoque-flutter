@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../providers/produtos_provider.dart';
 import '../models/produto.dart';
+import '../helpers/database.dart';
+import '../helpers/http.dart';
 
 class ProdutoInserir extends StatefulWidget {
   const ProdutoInserir({super.key});
@@ -82,6 +84,11 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
         );
       },
     );
+  }
+
+  Future<void> result(Produto produto) async {
+    await HttpHelper().postHttp(produto);
+    await DatabaseHelper().insertDb(produto.toMap());
   }
 
   @override
@@ -203,11 +210,10 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                         quantidade: int.parse(myControllerQuantidade.text),
                         unidade: myControllerUnidade.text,
                       );
-                      provider.adicionarProduto(produto).then((_) {
+                      result(produto).then((_) {
                         setState(() {
                           isLoaded = false;
                         });
-                        Navigator.of(context).pop();
                         alerta(context);
                       });
                     }

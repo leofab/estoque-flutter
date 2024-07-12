@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import '../models/produto.dart';
 import '../helpers/database.dart';
 import '../helpers/http.dart';
+import '../screens/produto_item.dart';
 
 class ProdutosProvider extends ChangeNotifier {
   List<Produto> _produtos = [
@@ -142,9 +143,19 @@ class ProdutosProvider extends ChangeNotifier {
     // ),
   ];
 
+  List<ProdutoItem> _produtosItems = [];
   List<Produto> produtosFiltro = [];
 
   List<Produto> _produtosVendidos = [];
+
+  List<ProdutoItem> get produtosItems {
+    return [..._produtosItems];
+  }
+
+  set produtosItems(List<ProdutoItem> produtosItems) {
+    _produtosItems = produtosItems;
+    notifyListeners();
+  }
 
   Future<void> fetchAll() async {
     String jsonString = '';
