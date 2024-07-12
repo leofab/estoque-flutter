@@ -214,6 +214,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                         setState(() {
                           isLoaded = false;
                         });
+                        Navigator.pop(context);
                         alerta(context);
                       });
                     }

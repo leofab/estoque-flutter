@@ -15,86 +15,83 @@ class ProdutosLista extends StatefulWidget {
   State<ProdutosLista> createState() => _ProdutosListaState();
 }
 
-List<ProdutoItem> produtosFiltro = [];
-List<Produto> firebaseProdutos = [];
-List<Produto> sqlProdutos = [];
-bool _isInit = true;
-
-@override
-void didChangeDependencies() {
-  if (_isInit) {
-    compareData();
-    _isInit = false;
-  }
-}
-
-@override
-void setState() {
-  produtosFiltro = compareLists(firebaseProdutos, sqlProdutos);
-}
-
-Future<void> compareData() async {
-  try {
-    final results = await Future.wait([
-      DatabaseHelper().fetchFromDB(),
-      HttpHelper().fetchFromFirebase(),
-    ]);
-    sqlProdutos = results[0];
-    firebaseProdutos = results[1];
-    setState();
-  } catch (e) {
-    print(e);
-  }
-}
-
-List<ProdutoItem> compareLists(
-    List<Produto> firebaseProdutos, List<Produto> sqlProdutos) {
-  List<Produto> onlyInFirebase = firebaseProdutos
-      .where((produto) => !sqlProdutos.any((p) => p.id == produto.id))
-      .toList();
-  List<Produto> onlyInSql = sqlProdutos
-      .where((produto) => !firebaseProdutos.any((p) => p.id == produto.id))
-      .toList();
-  if (onlyInSql.length > onlyInFirebase.length) {
-    produtosFiltro = onlyInSql
-        .map((produto) => ProdutoItem(
-              produto: produto,
-              id: produto.id.toString(),
-              tipo: produto.nome,
-              nome: produto.nome,
-              preco: produto.preco.toString(),
-              quantidade: produto.quantidade.toString(),
-            ))
-        .toList();
-    return produtosFiltro;
-  } else if (onlyInSql.length < onlyInFirebase.length) {
-    produtosFiltro = onlyInFirebase
-        .map((produto) => ProdutoItem(
-              produto: produto,
-              id: produto.id.toString(),
-              tipo: produto.nome,
-              nome: produto.nome,
-              preco: produto.preco.toString(),
-              quantidade: produto.quantidade.toString(),
-            ))
-        .toList();
-    return produtosFiltro;
-  } else {
-    produtosFiltro = sqlProdutos
-        .map((produto) => ProdutoItem(
-              produto: produto,
-              id: produto.id.toString(),
-              tipo: produto.nome,
-              nome: produto.nome,
-              preco: produto.preco.toString(),
-              quantidade: produto.quantidade.toString(),
-            ))
-        .toList();
-    return produtosFiltro;
-  }
-}
-
 class _ProdutosListaState extends State<ProdutosLista> {
+  List<ProdutoItem> produtosFiltro = [];
+  List<Produto> firebaseProdutos = [];
+  List<Produto> sqlProdutos = [];
+  bool _isInit = true;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_isInit) {
+      compareData();
+      _isInit = false;
+    }
+  }
+
+  Future<void> compareData() async {
+    try {
+      final results = await Future.wait([
+        DatabaseHelper().fetchFromDB(),
+        HttpHelper().fetchFromFirebase(),
+      ]);
+      sqlProdutos = results[0];
+      firebaseProdutos = results[1];
+      compareLists(firebaseProdutos, sqlProdutos);
+      setState(() {});
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  List<ProdutoItem> compareLists(
+      List<Produto> firebaseProdutos, List<Produto> sqlProdutos) {
+    List<Produto> onlyInFirebase = firebaseProdutos
+        .where((produto) => !sqlProdutos.any((p) => p.id == produto.id))
+        .toList();
+    List<Produto> onlyInSql = sqlProdutos
+        .where((produto) => !firebaseProdutos.any((p) => p.id == produto.id))
+        .toList();
+    if (onlyInSql.length > onlyInFirebase.length) {
+      produtosFiltro = onlyInSql
+          .map((produto) => ProdutoItem(
+                produto: produto,
+                id: produto.id.toString(),
+                tipo: produto.nome,
+                nome: produto.nome,
+                preco: produto.preco.toString(),
+                quantidade: produto.quantidade.toString(),
+              ))
+          .toList();
+      return produtosFiltro;
+    } else if (onlyInSql.length < onlyInFirebase.length) {
+      produtosFiltro = onlyInFirebase
+          .map((produto) => ProdutoItem(
+                produto: produto,
+                id: produto.id.toString(),
+                tipo: produto.nome,
+                nome: produto.nome,
+                preco: produto.preco.toString(),
+                quantidade: produto.quantidade.toString(),
+              ))
+          .toList();
+      return produtosFiltro;
+    } else {
+      produtosFiltro = sqlProdutos
+          .map((produto) => ProdutoItem(
+                produto: produto,
+                id: produto.id.toString(),
+                tipo: produto.nome,
+                nome: produto.nome,
+                preco: produto.preco.toString(),
+                quantidade: produto.quantidade.toString(),
+              ))
+          .toList();
+      return produtosFiltro;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ProdutosProvider provider = ProdutosProvider.of(context);
