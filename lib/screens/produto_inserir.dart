@@ -94,7 +94,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
   @override
   Widget build(BuildContext context) {
     final provider = ProdutosProvider.of(context);
-    int id = provider.produtos.length + 1;
+    int id = provider.produtosItems.length + 1;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Inserir Produto"),

@@ -121,11 +121,11 @@ class _ProdutosListaState extends State<ProdutosLista> {
         itemBuilder: (context, index) {
           return produtos[index];
         },
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
+        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+          maxCrossAxisExtent: 200,
           childAspectRatio: 3 / 2,
-          crossAxisSpacing: 10,
-          mainAxisSpacing: 10,
+          crossAxisSpacing: 20,
+          mainAxisSpacing: 20,
         ),
       ),
       drawer: Drawer(
