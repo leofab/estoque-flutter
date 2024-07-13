@@ -22,12 +22,15 @@ class _ProdutosListaState extends State<ProdutosLista> {
   bool _isInit = true;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (_isInit) {
-      compareData();
-      _isInit = false;
-    }
+  void initState() {
+    super.initState();
+    // Schedule compareData to run after the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_isInit) {
+        compareData();
+        _isInit = false;
+      }
+    });
   }
 
   Future<void> compareData() async {
@@ -89,6 +92,17 @@ class _ProdutosListaState extends State<ProdutosLista> {
               ))
           .toList();
       return produtosFiltro;
+    }
+  }
+
+  Future<void> _navigateToProdutoInserir(BuildContext context) async {
+    final result = await Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return const ProdutoInserir();
+      },
+    ));
+    if (result != null) {
+      await compareData();
     }
   }
 
@@ -191,11 +205,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
               heroTag: null,
             ),
             FloatingActionButton(
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) {
-                  return const ProdutoInserir();
-                },
-              )),
+              onPressed: () => _navigateToProdutoInserir(context),
               backgroundColor: Colors.amber[300],
               splashColor: Colors.amber[100],
               heroTag: null,
