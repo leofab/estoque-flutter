@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sqflite/sqflite.dart';
 
 import '../providers/produtos_provider.dart';
 import '../models/produto.dart';
+import '../models/produtosql.dart';
 import '../helpers/database.dart';
 import '../helpers/http.dart';
 
@@ -86,15 +88,14 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
     );
   }
 
-  Future<void> result(Produto produto) async {
-    await HttpHelper().postHttp(produto);
+  Future<void> result(ProdutoSql produto) async {
     await DatabaseHelper().insertDb(produto.toMap());
+    final Produto lastProdutoFromDB = await DatabaseHelper().getLastProduct();
+    await HttpHelper().postHttp(lastProdutoFromDB);
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = ProdutosProvider.of(context);
-    int id = provider.produtosItems.length + 1;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Inserir Produto"),
@@ -200,8 +201,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                       setState(() {
                         isLoaded = true;
                       });
-                      Produto produto = Produto(
-                        id: id,
+                      ProdutoSql produto = ProdutoSql(
                         tipo: myControllerTipo.text.toLowerCase(),
                         nome: myControllerNome.text,
                         valorCompraTotal:

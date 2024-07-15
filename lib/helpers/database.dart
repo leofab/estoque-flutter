@@ -74,4 +74,22 @@ class DatabaseHelper {
       );
     });
   }
+
+  Future<Produto> getLastProduct() async {
+    final io.Directory documentsDirectory =
+        await getApplicationDocumentsDirectory();
+    final String dbPath = path.join(documentsDirectory.path, 'produtos.db');
+    final db = await databaseFactory.openDatabase(dbPath);
+    final List<Map<String, dynamic>> maps = await db.query('produtos');
+    return Produto(
+      id: maps.last['id'],
+      tipo: maps.last['tipo'],
+      nome: maps.last['nome'],
+      valorCompraTotal: maps.last['valorCompraTotal'],
+      preco: maps.last['preco'],
+      quantidade: maps.last['quantidade'],
+      unidade: maps.last['unidade'],
+      vendas: maps.last['vendas'],
+    );
+  }
 }
