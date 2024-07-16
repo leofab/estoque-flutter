@@ -92,6 +92,27 @@ class DatabaseHelper {
     });
   }
 
+  Future<List<Produto>> fetchAllProductsWithSales() async {
+    final io.Directory documentsDirectory =
+        await getApplicationDocumentsDirectory();
+    final String dbPath = path.join(documentsDirectory.path, 'produtos.db');
+    final db = await databaseFactory.openDatabase(dbPath);
+    final List<Map<String, dynamic>> maps =
+        await db.query('produtos', where: 'vendas > 0');
+    return List.generate(maps.length, (i) {
+      return Produto(
+        id: maps[i]['id'],
+        tipo: maps[i]['tipo'],
+        nome: maps[i]['nome'],
+        valorCompraTotal: maps[i]['valorCompraTotal'],
+        preco: maps[i]['preco'],
+        quantidade: maps[i]['quantidade'],
+        unidade: maps[i]['unidade'],
+        vendas: maps[i]['vendas'],
+      );
+    });
+  }
+
   Future<Produto> getLastProduct() async {
     final io.Directory documentsDirectory =
         await getApplicationDocumentsDirectory();

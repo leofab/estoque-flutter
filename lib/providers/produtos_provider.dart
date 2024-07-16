@@ -157,6 +157,11 @@ class ProdutosProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  set produtosVendidos(List<Produto> produtosVendidos) {
+    _produtosVendidos = produtosVendidos;
+    notifyListeners();
+  }
+
   Future<void> fetchAll() async {
     String jsonString = '';
     final appDir = await syspaths.getApplicationDocumentsDirectory();
@@ -221,7 +226,7 @@ class ProdutosProvider extends ChangeNotifier {
 
   double valorVendaTotal() {
     return _produtosVendidos.fold(0, (total, produto) {
-      return total + produto.preco * produto.quantidade;
+      return total + produto.preco * produto.vendas;
     });
   }
 

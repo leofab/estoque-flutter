@@ -17,7 +17,9 @@ class ProdutosLista extends StatefulWidget {
 }
 
 class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
+  List<Produto> produtosProdutos = [];
   List<ProdutoItem> produtosFiltro = [];
+  List<Produto> produtosVendidos = [];
   List<Produto> firebaseProdutos = [];
   List<Produto> sqlProdutos = [];
   bool _isInit = true;
@@ -59,9 +61,11 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
       final results = await Future.wait([
         DatabaseHelper().fetchFromDB(),
         HttpHelper().fetchFromFirebase(),
+        DatabaseHelper().fetchAllProductsWithSales(),
       ]);
       sqlProdutos = results[0];
       firebaseProdutos = results[1];
+      produtosVendidos = results[2];
       compareLists(firebaseProdutos, sqlProdutos);
       setState(() {});
     } catch (e) {
@@ -88,6 +92,7 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
                 quantidade: produto.quantidade.toString(),
               ))
           .toList();
+      produtosProdutos = onlyInSql;
       return produtosFiltro;
     } else if (onlyInSql.length < onlyInFirebase.length) {
       produtosFiltro = onlyInFirebase
@@ -100,6 +105,7 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
                 quantidade: produto.quantidade.toString(),
               ))
           .toList();
+      produtosProdutos = onlyInFirebase;
       return produtosFiltro;
     } else {
       produtosFiltro = sqlProdutos
@@ -112,6 +118,7 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
                 quantidade: produto.quantidade.toString(),
               ))
           .toList();
+      produtosProdutos = sqlProdutos;
       return produtosFiltro;
     }
   }
@@ -131,7 +138,8 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
   Widget build(BuildContext context) {
     ProdutosProvider provider = ProdutosProvider.of(context);
     provider.produtosItems = produtosFiltro;
-    provider.produtos = produtosFiltro.map((item) => item.produto).toList();
+    provider.produtosVendidos = produtosVendidos;
+    provider.produtos = produtosProdutos;
     List<ProdutoItem> produtos = provider.produtosItems;
     return Scaffold(
       appBar: AppBar(

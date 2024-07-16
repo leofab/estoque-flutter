@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../providers/produtos_provider.dart';
 import '../screens/produto_item.dart';
-import '../helpers/database.dart';
 
 class ProdutoVendas extends StatefulWidget {
   const ProdutoVendas({super.key});
@@ -12,10 +11,6 @@ class ProdutoVendas extends StatefulWidget {
 }
 
 class _ProdutoVendasState extends State<ProdutoVendas> {
-  Future<void> fetchProdutos() async {
-    await DatabaseHelper().fetchFromDB();
-  }
-
   @override
   Widget build(BuildContext context) {
     ProdutosProvider provider = ProdutosProvider.of(context);
