@@ -1,16 +1,7 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:path_provider/path_provider.dart' as syspaths;
-import 'package:path/path.dart' as path;
 
 import 'package:provider/provider.dart';
 import '../models/produto.dart';
-import '../helpers/database.dart';
-import '../helpers/http.dart';
 import '../screens/produto_item.dart';
 
 class ProdutosProvider extends ChangeNotifier {
