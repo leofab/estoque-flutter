@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../providers/produtos_provider.dart';
 import '../screens/produto_item.dart';
+import '../screens/produto_item_vendas.dart';
 
 class ProdutoVendas extends StatefulWidget {
   const ProdutoVendas({super.key});
@@ -14,14 +15,15 @@ class _ProdutoVendasState extends State<ProdutoVendas> {
   @override
   Widget build(BuildContext context) {
     ProdutosProvider provider = ProdutosProvider.of(context);
-    List<ProdutoItem> produtos = provider.produtosVendidos
-        .map((produto) => ProdutoItem(
+    List<ProdutoItemVendas> produtos = provider.produtosVendidos
+        .map((produto) => ProdutoItemVendas(
               produto: produto,
               id: produto.id.toString(),
               tipo: produto.nome,
               nome: produto.nome,
               preco: produto.preco.toString(),
               quantidade: produto.quantidade.toString(),
+              vendas: produto.vendas.toString(),
             ))
         .toList();
     return Scaffold(

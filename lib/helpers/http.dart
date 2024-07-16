@@ -19,6 +19,7 @@ class HttpHelper {
               'quantidade': produto.quantidade,
               'unidade': produto.unidade,
               'vendas': produto.vendas,
+              'data': produto.data,
             }))
         .then((response) {
       print(json.decode(response.body));
@@ -47,6 +48,7 @@ class HttpHelper {
               'quantidade': produto.quantidade,
               'unidade': produto.unidade,
               'vendas': produto.vendas,
+              'data': produto.data,
             }))
         .then((response) {
       print(json.decode(response.body));
@@ -76,6 +78,7 @@ class HttpHelper {
           quantidade: value['quantidade'],
           unidade: value['unidade'],
           vendas: value['vendas'],
+          data: DateTime.parse(value['data']).toString(),
         ));
       });
       return produtos;
