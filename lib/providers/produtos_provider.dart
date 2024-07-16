@@ -14,138 +14,9 @@ import '../helpers/http.dart';
 import '../screens/produto_item.dart';
 
 class ProdutosProvider extends ChangeNotifier {
-  List<Produto> _produtos = [
-    // Produto(
-    //   id: 1,
-    //   tipo: Tipos.vinho.name,
-    //   nome: 'Vinho Sao Francisco',
-    //   valorCompraTotal: 50.00,
-    //   preco: 10.00,
-    //   quantidade: 10,
-    //   unidade: Unidades.litro.name,
-    // ),
-    // Produto(
-    //   id: 2,
-    //   tipo: Tipos.cachaca.name,
-    //   nome: 'Cachaça Ypioca',
-    //   valorCompraTotal: 25.00,
-    //   preco: 5.00,
-    //   quantidade: 5,
-    //   unidade: Unidades.litro.name,
-    // ),
-    // Produto(
-    //   id: 3,
-    //   tipo: Tipos.vodka.name,
-    //   nome: 'Vodka Smirnoff',
-    //   valorCompraTotal: 75.00,
-    //   preco: 15.00,
-    //   quantidade: 15,
-    //   unidade: Unidades.litro.name,
-    // ),
-    // Produto(
-    //   id: 4,
-    //   tipo: Tipos.whisky.name,
-    //   nome: 'Whisky Johnnie Walker',
-    //   valorCompraTotal: 100.00,
-    //   preco: 20.00,
-    //   quantidade: 20,
-    //   unidade: Unidades.litro.name,
-    // ),
-    // Produto(
-    //   id: 5,
-    //   tipo: Tipos.cerveja.name,
-    //   nome: 'Cerveja Skol',
-    //   valorCompraTotal: 10.00,
-    //   preco: 2.00,
-    //   quantidade: 20,
-    //   unidade: Unidades.lata350.name,
-    // ),
-    // Produto(
-    //   id: 6,
-    //   tipo: Tipos.gelo.name,
-    //   nome: 'Gelo',
-    //   valorCompraTotal: 1.00,
-    //   preco: 1.00,
-    //   quantidade: 5,
-    //   unidade: Unidades.saco.name,
-    // ),
-    // Produto(
-    //   id: 7,
-    //   tipo: Tipos.outros.name,
-    //   nome: 'Amendoin',
-    //   valorCompraTotal: 7.00,
-    //   preco: 7.00,
-    //   quantidade: 7,
-    //   unidade: Unidades.saco.name,
-    // ),
-    // Produto(
-    //   id: 8,
-    //   tipo: Tipos.rum.name,
-    //   nome: 'Rum Motilla',
-    //   valorCompraTotal: 8.00,
-    //   preco: 8.00,
-    //   quantidade: 8,
-    //   unidade: Unidades.litro.name,
-    // ),
-    // Produto(
-    //   id: 9,
-    //   tipo: Tipos.semAlcool.name,
-    //   nome: 'Refrigerante',
-    //   valorCompraTotal: 3.00,
-    //   preco: 3.00,
-    //   quantidade: 3,
-    //   unidade: Unidades.litro.name,
-    // ),
-    // Produto(
-    //   id: 10,
-    //   tipo: Tipos.vinho.name,
-    //   nome: 'Vinho Aurora',
-    //   valorCompraTotal: 4.00,
-    //   preco: 4.00,
-    //   quantidade: 4,
-    //   unidade: Unidades.litro.name,
-    // ),
-    // Produto(
-    //   id: 11,
-    //   tipo: Tipos.tequila.name,
-    //   nome: 'Tequila Jose Cuervo',
-    //   valorCompraTotal: 5.00,
-    //   preco: 5.00,
-    //   quantidade: 5,
-    //   unidade: Unidades.litro.name,
-    // ),
-    // Produto(
-    //   id: 12,
-    //   tipo: Tipos.absinto.name,
-    //   nome: 'Absinto',
-    //   valorCompraTotal: 6.00,
-    //   preco: 6.00,
-    //   quantidade: 6,
-    //   unidade: Unidades.litro.name,
-    // ),
-    // Produto(
-    //   id: 13,
-    //   tipo: Tipos.cerveja.name,
-    //   nome: 'Cerveja Heineken',
-    //   valorCompraTotal: 7.00,
-    //   preco: 7.00,
-    //   quantidade: 7,
-    //   unidade: Unidades.lata350.name,
-    // ),
-    // Produto(
-    //   id: 14,
-    //   tipo: Tipos.cerveja.name,
-    //   nome: 'Cerveja Budweiser',
-    //   valorCompraTotal: 8.00,
-    //   preco: 8.00,
-    //   quantidade: 8,
-    //   unidade: Unidades.lata350.name,
-    // ),
-  ];
-
+  List<Produto> _produtos = [];
   List<ProdutoItem> _produtosItems = [];
   List<Produto> produtosFiltro = [];
-
   List<Produto> _produtosVendidos = [];
 
   List<ProdutoItem> get produtosItems {
@@ -160,78 +31,6 @@ class ProdutosProvider extends ChangeNotifier {
   set produtosVendidos(List<Produto> produtosVendidos) {
     _produtosVendidos = produtosVendidos;
     notifyListeners();
-  }
-
-  Future<void> fetchAll() async {
-    String jsonString = '';
-    final appDir = await syspaths.getApplicationDocumentsDirectory();
-    final fileName = path.basename(path.join(appDir.path, 'produtos.json'));
-    var url = Uri.parse('${dotenv.env['url']}/produtos.json');
-    return http.get(url).then((response) {
-      jsonString = response.body;
-      List<dynamic> preData = json.decode(jsonString).values.toList();
-      final data = <String, dynamic>{};
-      for (var value in preData) {
-        data.addEntries(value.entries as Iterable<MapEntry<String, dynamic>>);
-      }
-
-      final dataMap = data as Map<String, dynamic>;
-      if (dataMap.length == _produtos.length) {
-        return;
-      } else {
-        List<Produto> produtos = [];
-        dataMap.values.forEach((value) {
-          produtos.add(Produto(
-            id: value['id'],
-            tipo: value['tipo'],
-            nome: value['nome'],
-            valorCompraTotal: value['valorCompraTotal'],
-            preco: value['preco'],
-            quantidade: value['quantidade'],
-            unidade: value['unidade'],
-          ));
-        });
-        File(fileName).writeAsString(jsonString);
-        _produtos = produtos;
-        notifyListeners();
-      }
-    });
-  }
-
-  Future<void> adicionarProduto(Produto produto) async {
-    Produto produtoInserido = _produtos.firstWhere(
-        (p) => p.nome == produto.nome && p.unidade == produto.unidade,
-        orElse: () {
-      _produtos.add(produto);
-      DatabaseHelper().insertDb(produto.toMap());
-      HttpHelper().postHttp(produto);
-      return produto;
-    });
-    if (produtoInserido != produto) {
-      produtoInserido.quantidade += produto.quantidade;
-      produtoInserido.valorCompraTotal += produto.valorCompraTotal;
-      DatabaseHelper().alterProductByName(produtoInserido.toMap());
-      HttpHelper().patchHttp(produtoInserido);
-    }
-    notifyListeners();
-  }
-
-  double valorCompraTotal() {
-    double total = 0;
-    for (int i = 0; i < _produtos.length; i++) {
-      total += _produtos[i].valorCompraTotal;
-    }
-    return total;
-  }
-
-  double valorVendaTotal() {
-    return _produtosVendidos.fold(0, (total, produto) {
-      return total + produto.preco * produto.vendas;
-    });
-  }
-
-  bool get filtroOn {
-    return produtosFiltro.isNotEmpty;
   }
 
   List<Produto> get produtos {
@@ -250,16 +49,25 @@ class ProdutosProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  double valorCompraTotal() {
+    double total = 0;
+    for (int i = 0; i < _produtos.length; i++) {
+      total += _produtos[i].valorCompraTotal;
+    }
+    return total;
+  }
+
+  double valorVendaTotal() {
+    return _produtosVendidos.fold(0, (total, produto) {
+      return total + produto.preco * produto.vendas;
+    });
+  }
+
   List<Produto> filtrarPorTipo(String tipo) {
     produtosFiltro =
         _produtos.where((produto) => produto.tipo.contains(tipo)).toList();
     notifyListeners();
     return produtosFiltro;
-  }
-
-  void limparFiltro() {
-    produtosFiltro = [];
-    notifyListeners();
   }
 
   void venderProduto(Produto produto) {
@@ -279,12 +87,6 @@ class ProdutosProvider extends ChangeNotifier {
   void alterarProduto(Produto produto) {
     final index = _produtos.indexWhere((p) => p.id == produto.id);
     _produtos[index] = produto;
-    notifyListeners();
-  }
-
-  void alterarProdutoVendido(Produto produto) {
-    final index = _produtosVendidos.indexWhere((p) => p.id == produto.id);
-    _produtosVendidos[index] = produto;
     notifyListeners();
   }
 

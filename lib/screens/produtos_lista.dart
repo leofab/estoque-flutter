@@ -140,7 +140,9 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
     provider.produtosItems = produtosFiltro;
     provider.produtosVendidos = produtosVendidos;
     provider.produtos = produtosProdutos;
-    List<ProdutoItem> produtos = provider.produtosItems;
+    List<ProdutoItem> produtos = provider.produtosItems
+        .where((produto) => produto.produto.quantidade > 0)
+        .toList();
     return Scaffold(
       appBar: AppBar(
         title: Text(

@@ -63,15 +63,6 @@ class DatabaseHelper {
         where: 'unidade = ?', whereArgs: [data['unidade']]);
   }
 
-  Future<String> dbToString() async {
-    final io.Directory documentsDirectory =
-        await getApplicationDocumentsDirectory();
-    final String dbPath = path.join(documentsDirectory.path, 'produtos.db');
-    final db = await databaseFactory.openDatabase(dbPath);
-    final List<Map<String, dynamic>> maps = await db.query('produtos');
-    return maps.toString();
-  }
-
   Future<List<Produto>> fetchFromDB() async {
     final io.Directory documentsDirectory =
         await getApplicationDocumentsDirectory();
