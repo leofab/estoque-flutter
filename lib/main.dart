@@ -13,6 +13,7 @@ import 'screens/produto_vendas.dart';
 import 'providers/produtos_provider.dart';
 import './helpers/database.dart';
 
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 Future main() async {
   await dotenv.load(fileName: ".env");
   if (io.Platform.isWindows || io.Platform.isLinux) {
@@ -21,11 +22,11 @@ Future main() async {
     WidgetsFlutterBinding.ensureInitialized();
   }
   DatabaseHelper().initDatabase();
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +35,7 @@ class MainApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProdutosProvider()),
       ],
       child: MaterialApp(
+          navigatorObservers: [routeObserver],
           title: 'Estoque App',
           debugShowCheckedModeBanner: false,
           initialRoute: '/login',

@@ -28,6 +28,23 @@ class DatabaseHelper {
         conflictAlgorithm: ConflictAlgorithm.replace);
   }
 
+  Future<void> alterProductByID(Map<String, dynamic> data) async {
+    final io.Directory documentsDirectory =
+        await getApplicationDocumentsDirectory();
+    final String dbPath = path.join(documentsDirectory.path, 'produtos.db');
+    final db = await databaseFactory.openDatabase(dbPath);
+    await db.update('produtos', data, where: 'id = ?', whereArgs: [data['id']]);
+  }
+
+  Future<void> alterProductByQuantidade(Map<String, dynamic> data) async {
+    final io.Directory documentsDirectory =
+        await getApplicationDocumentsDirectory();
+    final String dbPath = path.join(documentsDirectory.path, 'produtos.db');
+    final db = await databaseFactory.openDatabase(dbPath);
+    await db.update('produtos', data,
+        where: 'quantidade = ?', whereArgs: [data['quantidade']]);
+  }
+
   Future<void> alterProductByName(Map<String, dynamic> data) async {
     final io.Directory documentsDirectory =
         await getApplicationDocumentsDirectory();

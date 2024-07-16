@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_helder/main.dart';
 import 'package:flutter_application_helder/providers/produtos_provider.dart';
 
 import '../models/produto.dart';
@@ -15,7 +16,7 @@ class ProdutosLista extends StatefulWidget {
   State<ProdutosLista> createState() => _ProdutosListaState();
 }
 
-class _ProdutosListaState extends State<ProdutosLista> {
+class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
   List<ProdutoItem> produtosFiltro = [];
   List<Produto> firebaseProdutos = [];
   List<Produto> sqlProdutos = [];
@@ -31,6 +32,26 @@ class _ProdutosListaState extends State<ProdutosLista> {
         _isInit = false;
       }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final route = ModalRoute.of(context);
+    if (route is PageRoute) {
+      routeObserver.subscribe(this, route);
+    }
+  }
+
+  @override
+  void dispose() {
+    routeObserver.unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
+  void didPopNext() {
+    compareData();
   }
 
   Future<void> compareData() async {
@@ -110,6 +131,7 @@ class _ProdutosListaState extends State<ProdutosLista> {
   Widget build(BuildContext context) {
     ProdutosProvider provider = ProdutosProvider.of(context);
     provider.produtosItems = produtosFiltro;
+    provider.produtos = produtosFiltro.map((item) => item.produto).toList();
     List<ProdutoItem> produtos = provider.produtosItems;
     return Scaffold(
       appBar: AppBar(

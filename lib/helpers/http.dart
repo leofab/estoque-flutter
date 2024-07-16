@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io' as io;
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/produto.dart';
@@ -26,8 +25,17 @@ class HttpHelper {
               'preco': produto.preco,
               'quantidade': produto.quantidade,
               'unidade': produto.unidade,
+              'vendas': produto.vendas,
             }))
         .then((response) {
+      print(json.decode(response.body));
+    });
+  }
+
+  Future<void> deleteHttp(Produto produto) async {
+    var url =
+        Uri.parse('${dotenv.env['url']}/produtos/produto${produto.id}.json');
+    return http.delete(url).then((response) {
       print(json.decode(response.body));
     });
   }
@@ -45,6 +53,7 @@ class HttpHelper {
               'preco': produto.preco,
               'quantidade': produto.quantidade,
               'unidade': produto.unidade,
+              'vendas': produto.vendas,
             }))
         .then((response) {
       print(json.decode(response.body));
@@ -75,6 +84,7 @@ class HttpHelper {
           preco: value['preco'],
           quantidade: value['quantidade'],
           unidade: value['unidade'],
+          vendas: value['vendas'],
         ));
       });
       return produtos;

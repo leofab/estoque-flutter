@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 
-import '../providers/produtos_provider.dart';
 import '../models/produto.dart';
 import '../models/produtosql.dart';
 import '../helpers/database.dart';
