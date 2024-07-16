@@ -1,11 +1,17 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:path_provider/path_provider.dart' as syspaths;
+import 'package:path/path.dart' as path;
 
 import 'package:provider/provider.dart';
 import '../models/produto.dart';
+import '../helpers/database.dart';
+import '../helpers/http.dart';
+import '../screens/produto_item.dart';
 
 class ProdutosProvider extends ChangeNotifier {
   List<Produto> _produtos = [
@@ -137,19 +143,44 @@ class ProdutosProvider extends ChangeNotifier {
     // ),
   ];
 
+  List<ProdutoItem> _produtosItems = [];
   List<Produto> produtosFiltro = [];
 
   List<Produto> _produtosVendidos = [];
 
-  Future<void> fetchAll() {
+  List<ProdutoItem> get produtosItems {
+    return [..._produtosItems];
+  }
+
+  set produtosItems(List<ProdutoItem> produtosItems) {
+    _produtosItems = produtosItems;
+    notifyListeners();
+  }
+
+  set produtosVendidos(List<Produto> produtosVendidos) {
+    _produtosVendidos = produtosVendidos;
+    notifyListeners();
+  }
+
+  Future<void> fetchAll() async {
+    String jsonString = '';
+    final appDir = await syspaths.getApplicationDocumentsDirectory();
+    final fileName = path.basename(path.join(appDir.path, 'produtos.json'));
     var url = Uri.parse('${dotenv.env['url']}/produtos.json');
     return http.get(url).then((response) {
-      final data = json.decode(response.body) as Map<String, dynamic>;
-      if (data.length == _produtos.length) {
+      jsonString = response.body;
+      List<dynamic> preData = json.decode(jsonString).values.toList();
+      final data = <String, dynamic>{};
+      for (var value in preData) {
+        data.addEntries(value.entries as Iterable<MapEntry<String, dynamic>>);
+      }
+
+      final dataMap = data as Map<String, dynamic>;
+      if (dataMap.length == _produtos.length) {
         return;
       } else {
         List<Produto> produtos = [];
-        data.values.forEach((value) {
+        dataMap.values.forEach((value) {
           produtos.add(Produto(
             id: value['id'],
             tipo: value['tipo'],
@@ -160,38 +191,29 @@ class ProdutosProvider extends ChangeNotifier {
             unidade: value['unidade'],
           ));
         });
+        File(fileName).writeAsString(jsonString);
         _produtos = produtos;
         notifyListeners();
       }
     });
   }
 
-  Future<void> adicionarProduto(Produto produto) {
-    var url = Uri.parse('${dotenv.env['url']}/produtos.json');
-    return http
-        .post(url,
-            body: json.encode({
-              'id': produto.id,
-              'tipo': produto.tipo,
-              'nome': produto.nome,
-              'valorCompraTotal': produto.valorCompraTotal,
-              'preco': produto.preco,
-              'quantidade': produto.quantidade,
-              'unidade': produto.unidade,
-            }))
-        .then((response) {
-      Produto produtoInserido = _produtos.firstWhere(
-          (p) => p.nome == produto.nome && p.unidade == produto.unidade,
-          orElse: () {
-        _produtos.add(produto);
-        return produto;
-      });
-      if (produtoInserido != produto) {
-        produtoInserido.quantidade += produto.quantidade;
-        produtoInserido.valorCompraTotal += produto.valorCompraTotal;
-      }
-      notifyListeners();
+  Future<void> adicionarProduto(Produto produto) async {
+    Produto produtoInserido = _produtos.firstWhere(
+        (p) => p.nome == produto.nome && p.unidade == produto.unidade,
+        orElse: () {
+      _produtos.add(produto);
+      DatabaseHelper().insertDb(produto.toMap());
+      HttpHelper().postHttp(produto);
+      return produto;
     });
+    if (produtoInserido != produto) {
+      produtoInserido.quantidade += produto.quantidade;
+      produtoInserido.valorCompraTotal += produto.valorCompraTotal;
+      DatabaseHelper().alterProductByName(produtoInserido.toMap());
+      HttpHelper().patchHttp(produtoInserido);
+    }
+    notifyListeners();
   }
 
   double valorCompraTotal() {
@@ -204,7 +226,7 @@ class ProdutosProvider extends ChangeNotifier {
 
   double valorVendaTotal() {
     return _produtosVendidos.fold(0, (total, produto) {
-      return total + produto.preco * produto.quantidade;
+      return total + produto.preco * produto.vendas;
     });
   }
 

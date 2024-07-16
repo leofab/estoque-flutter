@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
-import '../providers/produtos_provider.dart';
 import '../models/produto.dart';
+import '../models/produtosql.dart';
+import '../helpers/database.dart';
+import '../helpers/http.dart';
 
 class ProdutoInserir extends StatefulWidget {
   const ProdutoInserir({super.key});
@@ -84,10 +86,14 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
     );
   }
 
+  Future<void> result(ProdutoSql produto) async {
+    await DatabaseHelper().insertDb(produto.toMap());
+    final Produto lastProdutoFromDB = await DatabaseHelper().getLastProduct();
+    await HttpHelper().postHttp(lastProdutoFromDB);
+  }
+
   @override
   Widget build(BuildContext context) {
-    final provider = ProdutosProvider.of(context);
-    int id = provider.produtos.length + 1;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Inserir Produto"),
@@ -193,8 +199,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                       setState(() {
                         isLoaded = true;
                       });
-                      Produto produto = Produto(
-                        id: id,
+                      ProdutoSql produto = ProdutoSql(
                         tipo: myControllerTipo.text.toLowerCase(),
                         nome: myControllerNome.text,
                         valorCompraTotal:
@@ -203,11 +208,11 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                         quantidade: int.parse(myControllerQuantidade.text),
                         unidade: myControllerUnidade.text,
                       );
-                      provider.adicionarProduto(produto).then((_) {
+                      result(produto).then((_) {
                         setState(() {
                           isLoaded = false;
                         });
-                        Navigator.of(context).pop();
+                        Navigator.pop(context, true);
                         alerta(context);
                       });
                     }
