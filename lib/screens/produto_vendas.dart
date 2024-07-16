@@ -128,45 +128,6 @@ class _ProdutoVendasState extends State<ProdutoVendas> {
           ],
         ),
       ),
-      // floatingActionButton: Padding(
-      //   padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 0),
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //     children: [
-      //       FloatingActionButton.extended(
-      //         label: const Text("Filtrar"),
-      //         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-      //           builder: (context) {
-      //             return const Filtrar();
-      //           },
-      //         )),
-      //         backgroundColor: Colors.amber[300],
-      //         splashColor: Colors.amber[100],
-      //         icon: const Icon(Icons.filter_alt),
-      //         heroTag: null,
-      //       ),
-      //       FloatingActionButton(
-      //         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-      //           builder: (_) {
-      //             return const ProdutoInserir();
-      //           },
-      //         )),
-      //         backgroundColor: Colors.amber[300],
-      //         splashColor: Colors.amber[100],
-      //         heroTag: null,
-      //         child: const Icon(Icons.add),
-      //       ),
-      //     ],
-      //   ),
-      // ),
-      // persistentFooterButtons: [
-      //   ElevatedButton(
-      //     onPressed: () {
-      //       provider.limparFiltro();
-      //     },
-      //     child: const Text("Limpar Filtros"),
-      //   ),
-      // ],
     );
   }
 }

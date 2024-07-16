@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_application_helder/main.dart';
 import 'package:flutter_application_helder/providers/produtos_provider.dart';
 
@@ -28,7 +29,7 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
   void initState() {
     super.initState();
     // Schedule compareData to run after the widget is built
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       if (_isInit) {
         compareData();
         _isInit = false;
@@ -53,7 +54,9 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
 
   @override
   void didPopNext() {
-    compareData();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      compareData();
+    });
   }
 
   Future<void> compareData() async {
@@ -67,7 +70,11 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
       firebaseProdutos = results[1];
       produtosVendidos = results[2];
       compareLists(firebaseProdutos, sqlProdutos);
-      setState(() {});
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {});
+        }
+      });
     } catch (e) {
       print(e);
     }
