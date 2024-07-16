@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../providers/produtos_provider.dart';
+import 'produtos_lista.dart';
 
 class Filtrar extends StatefulWidget {
   const Filtrar({super.key});
@@ -11,29 +13,30 @@ class Filtrar extends StatefulWidget {
 
 class _FiltrarState extends State<Filtrar> {
   final key = GlobalKey<FormState>();
-  final myControllerNome = TextEditingController();
   final myControllerTipo = TextEditingController();
-  final myControllerCategoria = TextEditingController();
-  final myControllerFornecedor = TextEditingController();
-  final myControllerLote = TextEditingController();
 
   @override
   void dispose() {
-    myControllerNome.dispose();
     myControllerTipo.dispose();
-    myControllerCategoria.dispose();
-    myControllerFornecedor.dispose();
-    myControllerLote.dispose();
     super.dispose();
   }
 
-  void retornar(BuildContext context) {
-    Navigator.of(context).pop();
+  Future<void> _retornar(BuildContext context) async {
+    ProdutosProvider provider =
+        Provider.of<ProdutosProvider>(context, listen: false);
+    final result = await Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return ProdutosLista();
+      },
+    ));
+    if (result == true) {
+      provider.notifyListeners();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = ProdutosProvider.of(context);
+    ProdutosProvider provider = ProdutosProvider.of(context);
     return Scaffold(
       appBar: AppBar(
         title: const Text("Filtrar Produto"),
@@ -56,9 +59,9 @@ class _FiltrarState extends State<Filtrar> {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     child: ElevatedButton(
                       onPressed: () {
-                        provider.produtosFiltro = provider.filtrarPorTipo(
+                        provider.filtrarPorTipo(
                             myControllerTipo.text.toLowerCase());
-                        retornar(context);
+                        _retornar(context);
                       },
                       child: const Text("Filtrar"),
                     ),

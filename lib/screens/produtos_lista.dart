@@ -140,9 +140,21 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
     provider.produtosItems = produtosFiltro;
     provider.produtosVendidos = produtosVendidos;
     provider.produtos = produtosProdutos;
-    List<ProdutoItem> produtos = provider.produtosItems
-        .where((produto) => produto.produto.quantidade > 0)
-        .toList();
+    List<ProdutoItem> produtos = provider.isFiltered
+        ? provider.produtos.map((produto) {
+            return ProdutoItem(
+              produto: produto,
+              id: produto.id.toString(),
+              tipo: produto.nome,
+              nome: produto.nome,
+              preco: produto.preco.toString(),
+              quantidade: produto.quantidade.toString(),
+            );
+          }).toList()
+        : provider.produtosItems
+            .where((produto) => produto.produto.quantidade > 0)
+            .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -249,7 +261,7 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
       persistentFooterButtons: [
         ElevatedButton(
           onPressed: () {
-            // provider.limparFiltro();
+            provider.clearFilter();
           },
           child: const Text("Limpar Filtros"),
         ),

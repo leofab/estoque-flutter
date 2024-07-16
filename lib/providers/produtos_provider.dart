@@ -7,8 +7,11 @@ import '../screens/produto_item.dart';
 class ProdutosProvider extends ChangeNotifier {
   List<Produto> _produtos = [];
   List<ProdutoItem> _produtosItems = [];
-  List<Produto> produtosFiltro = [];
+  List<Produto> _produtosFiltro = [];
   List<Produto> _produtosVendidos = [];
+  bool _isFiltered = false;
+
+  bool get isFiltered => _isFiltered;
 
   List<ProdutoItem> get produtosItems {
     return [..._produtosItems];
@@ -24,12 +27,7 @@ class ProdutosProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Produto> get produtos {
-    if (produtosFiltro.isNotEmpty) {
-      return produtosFiltro;
-    }
-    return [..._produtos];
-  }
+  List<Produto> get produtos => _isFiltered ? _produtosFiltro : _produtos;
 
   List<Produto> get produtosVendidos {
     return [..._produtosVendidos];
@@ -37,6 +35,11 @@ class ProdutosProvider extends ChangeNotifier {
 
   set produtos(List<Produto> produtos) {
     _produtos = produtos;
+    notifyListeners();
+  }
+
+  set produtosFiltro(List<Produto> produtosFiltro) {
+    _produtosFiltro = produtosFiltro;
     notifyListeners();
   }
 
@@ -55,10 +58,16 @@ class ProdutosProvider extends ChangeNotifier {
   }
 
   List<Produto> filtrarPorTipo(String tipo) {
-    produtosFiltro =
+    _produtosFiltro =
         _produtos.where((produto) => produto.tipo.contains(tipo)).toList();
+    _isFiltered = true;
     notifyListeners();
-    return produtosFiltro;
+    return produtos;
+  }
+
+  void clearFilter() {
+    _isFiltered = false;
+    notifyListeners();
   }
 
   void venderProduto(Produto produto) {
