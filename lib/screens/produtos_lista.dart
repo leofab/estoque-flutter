@@ -69,8 +69,11 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
       sqlProdutos = results[0];
       firebaseProdutos = results[1];
       produtosVendidos = results[2];
-      compareLists(firebaseProdutos, sqlProdutos);
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      await compareLists(firebaseProdutos, sqlProdutos);
+      print('SQL Products: $sqlProdutos');
+      print('Firebase Products: $firebaseProdutos');
+      print('Sold Products: $produtosVendidos');
+      SchedulerBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           setState(() {});
         }
@@ -80,54 +83,41 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
     }
   }
 
-  List<ProdutoItem> compareLists(
-      List<Produto> firebaseProdutos, List<Produto> sqlProdutos) {
-    List<Produto> onlyInFirebase = firebaseProdutos
-        .where((produto) => !sqlProdutos.any((p) => p.id == produto.id))
-        .toList();
-    List<Produto> onlyInSql = sqlProdutos
-        .where((produto) => !firebaseProdutos.any((p) => p.id == produto.id))
-        .toList();
-    if (onlyInSql.length > onlyInFirebase.length) {
-      produtosFiltro = onlyInSql
-          .map((produto) => ProdutoItem(
-                produto: produto,
-                id: produto.id.toString(),
-                tipo: produto.nome,
-                nome: produto.nome,
-                preco: produto.preco.toString(),
-                quantidade: produto.quantidade.toString(),
-              ))
-          .toList();
-      produtosProdutos = onlyInSql;
-      return produtosFiltro;
-    } else if (onlyInSql.length < onlyInFirebase.length) {
-      produtosFiltro = onlyInFirebase
-          .map((produto) => ProdutoItem(
-                produto: produto,
-                id: produto.id.toString(),
-                tipo: produto.nome,
-                nome: produto.nome,
-                preco: produto.preco.toString(),
-                quantidade: produto.quantidade.toString(),
-              ))
-          .toList();
-      produtosProdutos = onlyInFirebase;
-      return produtosFiltro;
-    } else {
-      produtosFiltro = sqlProdutos
-          .map((produto) => ProdutoItem(
-                produto: produto,
-                id: produto.id.toString(),
-                tipo: produto.nome,
-                nome: produto.nome,
-                preco: produto.preco.toString(),
-                quantidade: produto.quantidade.toString(),
-              ))
-          .toList();
+  Future<void> compareLists(
+      List<Produto> firebaseProdutos, List<Produto> sqlProdutos) async {
+    if (sqlProdutos.length > firebaseProdutos.length) {
+      for (var produto in sqlProdutos) {
+        if (!firebaseProdutos.contains(produto)) {
+          await HttpHelper().postHttp(produto);
+        } else {
+          await HttpHelper().deleteHttp(produto);
+          await HttpHelper().postHttp(produto);
+        }
+      }
       produtosProdutos = sqlProdutos;
-      return produtosFiltro;
+    } else if (sqlProdutos.length < firebaseProdutos.length) {
+      for (var produto in firebaseProdutos) {
+        if (!sqlProdutos.contains(produto)) {
+          await DatabaseHelper().insertDb(produto.toMap());
+        } else {
+          await DatabaseHelper().alterProductByID(produto.toMap());
+        }
+      }
+      produtosProdutos = firebaseProdutos;
+    } else {
+      produtosProdutos = sqlProdutos;
     }
+
+    produtosFiltro = produtosProdutos
+        .map((produto) => ProdutoItem(
+              produto: produto,
+              id: produto.id.toString(),
+              tipo: produto.nome,
+              nome: produto.nome,
+              preco: produto.preco.toString(),
+              quantidade: produto.quantidade.toString(),
+            ))
+        .toList();
   }
 
   Future<void> _navigateToProdutoInserir(BuildContext context) async {
@@ -221,8 +211,9 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
             ),
             ListTile(
               title: const Text("Vendas / Caixa"),
-              onTap: () {
+              onTap: () async {
                 if (ModalRoute.of(context)!.settings.name != "/vendas") {
+                  await compareData();
                   Navigator.of(context).pushReplacementNamed("/vendas");
                 } else {
                   Navigator.pop(context);

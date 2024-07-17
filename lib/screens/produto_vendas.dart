@@ -25,6 +25,7 @@ class _ProdutoVendasState extends State<ProdutoVendas> {
               vendas: produto.vendas.toString(),
             ))
         .toList();
+    print('Loaded Sold Products: ${produtos.toString()}');
     return Scaffold(
       appBar: AppBar(
         title: Text(
