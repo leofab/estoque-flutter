@@ -70,9 +70,6 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
       firebaseProdutos = results[1];
       produtosVendidos = results[2];
       await compareLists(firebaseProdutos, sqlProdutos);
-      print('SQL Products: $sqlProdutos');
-      print('Firebase Products: $firebaseProdutos');
-      print('Sold Products: $produtosVendidos');
       SchedulerBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           setState(() {});
