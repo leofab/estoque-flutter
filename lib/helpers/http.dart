@@ -1,17 +1,10 @@
 import 'dart:convert';
-import 'dart:io' as io;
 
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/produto.dart';
 
 class HttpHelper {
-  Future<void> getHttp() async {
-    var url = Uri.parse('${dotenv.env['url']}/produtos.json');
-    final response = await http.get(url);
-    final data = json.decode(response.body);
-  }
-
   Future<void> postHttp(Produto produto) async {
     var url =
         Uri.parse('${dotenv.env['url']}/produtos/produto${produto.id}.json');
@@ -26,6 +19,7 @@ class HttpHelper {
               'quantidade': produto.quantidade,
               'unidade': produto.unidade,
               'vendas': produto.vendas,
+              'data': produto.data,
             }))
         .then((response) {
       print(json.decode(response.body));
@@ -54,6 +48,7 @@ class HttpHelper {
               'quantidade': produto.quantidade,
               'unidade': produto.unidade,
               'vendas': produto.vendas,
+              'data': produto.data,
             }))
         .then((response) {
       print(json.decode(response.body));
@@ -62,8 +57,6 @@ class HttpHelper {
 
   Future<List<Produto>> fetchFromFirebase() async {
     String jsonString = '';
-    final appDir = await io.Directory.systemTemp;
-    final fileName = 'produtos.json';
     var url = Uri.parse('${dotenv.env['url']}/produtos.json');
     return http.get(url).then((response) {
       jsonString = response.body;
@@ -85,6 +78,7 @@ class HttpHelper {
           quantidade: value['quantidade'],
           unidade: value['unidade'],
           vendas: value['vendas'],
+          data: DateTime.parse(value['data']).toString(),
         ));
       });
       return produtos;

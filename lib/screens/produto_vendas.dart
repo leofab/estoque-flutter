@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../providers/produtos_provider.dart';
-import '../screens/produto_item.dart';
+import '../screens/produto_item_vendas.dart';
 
 class ProdutoVendas extends StatefulWidget {
   const ProdutoVendas({super.key});
@@ -14,16 +14,18 @@ class _ProdutoVendasState extends State<ProdutoVendas> {
   @override
   Widget build(BuildContext context) {
     ProdutosProvider provider = ProdutosProvider.of(context);
-    List<ProdutoItem> produtos = provider.produtosVendidos
-        .map((produto) => ProdutoItem(
+    List<ProdutoItemVendas> produtos = provider.produtosVendidos
+        .map((produto) => ProdutoItemVendas(
               produto: produto,
               id: produto.id.toString(),
               tipo: produto.nome,
               nome: produto.nome,
               preco: produto.preco.toString(),
               quantidade: produto.quantidade.toString(),
+              vendas: produto.vendas.toString(),
             ))
         .toList();
+    print('Loaded Sold Products: ${produtos.toString()}');
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -127,45 +129,6 @@ class _ProdutoVendasState extends State<ProdutoVendas> {
           ],
         ),
       ),
-      // floatingActionButton: Padding(
-      //   padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 0),
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      //     children: [
-      //       FloatingActionButton.extended(
-      //         label: const Text("Filtrar"),
-      //         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-      //           builder: (context) {
-      //             return const Filtrar();
-      //           },
-      //         )),
-      //         backgroundColor: Colors.amber[300],
-      //         splashColor: Colors.amber[100],
-      //         icon: const Icon(Icons.filter_alt),
-      //         heroTag: null,
-      //       ),
-      //       FloatingActionButton(
-      //         onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-      //           builder: (_) {
-      //             return const ProdutoInserir();
-      //           },
-      //         )),
-      //         backgroundColor: Colors.amber[300],
-      //         splashColor: Colors.amber[100],
-      //         heroTag: null,
-      //         child: const Icon(Icons.add),
-      //       ),
-      //     ],
-      //   ),
-      // ),
-      // persistentFooterButtons: [
-      //   ElevatedButton(
-      //     onPressed: () {
-      //       provider.limparFiltro();
-      //     },
-      //     child: const Text("Limpar Filtros"),
-      //   ),
-      // ],
     );
   }
 }

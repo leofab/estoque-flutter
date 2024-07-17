@@ -1,6 +1,5 @@
 import 'dart:io' as io;
 import 'package:path/path.dart' as path;
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 import 'package:path_provider/path_provider.dart';
@@ -12,10 +11,10 @@ class DatabaseHelper {
     final io.Directory documentsDirectory =
         await getApplicationDocumentsDirectory();
     final String dbPath = path.join(documentsDirectory.path, 'produtos.db');
-    var db = await openDatabase(dbPath, version: 1,
+    await openDatabase(dbPath, version: 1,
         onCreate: (Database db, int version) async {
       await db.execute(
-          'CREATE TABLE produtos(id INTEGER PRIMARY KEY, tipo TEXT, nome TEXT, valorCompraTotal REAL, preco REAL, quantidade INTEGER, unidade TEXT, vendas INTEGER)');
+          'CREATE TABLE produtos(id INTEGER PRIMARY KEY, tipo TEXT, nome TEXT, valorCompraTotal REAL, preco REAL, quantidade INTEGER, unidade TEXT, vendas INTEGER, data TEXT)');
     });
   }
 
@@ -79,6 +78,7 @@ class DatabaseHelper {
         quantidade: maps[i]['quantidade'],
         unidade: maps[i]['unidade'],
         vendas: maps[i]['vendas'],
+        data: maps[i]['data'],
       );
     });
   }
@@ -100,6 +100,7 @@ class DatabaseHelper {
         quantidade: maps[i]['quantidade'],
         unidade: maps[i]['unidade'],
         vendas: maps[i]['vendas'],
+        data: maps[i]['data'],
       );
     });
   }
@@ -119,6 +120,7 @@ class DatabaseHelper {
       quantidade: maps.last['quantidade'],
       unidade: maps.last['unidade'],
       vendas: maps.last['vendas'],
+      data: maps.last['data'],
     );
   }
 }

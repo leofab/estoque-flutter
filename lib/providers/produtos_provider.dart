@@ -1,52 +1,52 @@
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:path_provider/path_provider.dart' as syspaths;
-import 'package:path/path.dart' as path;
 
 import 'package:provider/provider.dart';
 import '../models/produto.dart';
-import '../helpers/database.dart';
-import '../helpers/http.dart';
 import '../screens/produto_item.dart';
 
 class ProdutosProvider extends ChangeNotifier {
   List<Produto> _produtos = [];
   List<ProdutoItem> _produtosItems = [];
-  List<Produto> produtosFiltro = [];
+  List<Produto> _produtosFiltro = [];
   List<Produto> _produtosVendidos = [];
+  bool _isFiltered = false;
+
+  bool get isFiltered => _isFiltered;
 
   List<ProdutoItem> get produtosItems {
     return [..._produtosItems];
   }
 
-  set produtosItems(List<ProdutoItem> produtosItems) {
-    _produtosItems = produtosItems;
-    notifyListeners();
-  }
-
-  set produtosVendidos(List<Produto> produtosVendidos) {
-    _produtosVendidos = produtosVendidos;
-    notifyListeners();
-  }
-
-  List<Produto> get produtos {
-    if (produtosFiltro.isNotEmpty) {
-      return produtosFiltro;
-    }
-    return [..._produtos];
-  }
+  List<Produto> get produtos => _isFiltered ? _produtosFiltro : _produtos;
 
   List<Produto> get produtosVendidos {
     return [..._produtosVendidos];
   }
 
+  void _scheduleNotifyListeners() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
+  }
+
+  set produtosItems(List<ProdutoItem> produtosItems) {
+    _produtosItems = produtosItems;
+    _scheduleNotifyListeners();
+  }
+
+  set produtosVendidos(List<Produto> produtosVendidos) {
+    _produtosVendidos = produtosVendidos;
+    _scheduleNotifyListeners();
+  }
+
   set produtos(List<Produto> produtos) {
     _produtos = produtos;
-    notifyListeners();
+    _scheduleNotifyListeners();
+  }
+
+  set produtosFiltro(List<Produto> produtosFiltro) {
+    _produtosFiltro = produtosFiltro;
+    _scheduleNotifyListeners();
   }
 
   double valorCompraTotal() {
@@ -64,10 +64,16 @@ class ProdutosProvider extends ChangeNotifier {
   }
 
   List<Produto> filtrarPorTipo(String tipo) {
-    produtosFiltro =
+    _produtosFiltro =
         _produtos.where((produto) => produto.tipo.contains(tipo)).toList();
-    notifyListeners();
-    return produtosFiltro;
+    _isFiltered = true;
+    _scheduleNotifyListeners();
+    return produtos;
+  }
+
+  void clearFilter() {
+    _isFiltered = false;
+    _scheduleNotifyListeners();
   }
 
   void venderProduto(Produto produto) {
@@ -81,13 +87,13 @@ class ProdutosProvider extends ChangeNotifier {
     if (produtoVendido != produto) {
       produtoVendido.quantidade += produto.quantidade;
     }
-    notifyListeners();
+    _scheduleNotifyListeners();
   }
 
   void alterarProduto(Produto produto) {
     final index = _produtos.indexWhere((p) => p.id == produto.id);
     _produtos[index] = produto;
-    notifyListeners();
+    _scheduleNotifyListeners();
   }
 
   static ProdutosProvider of(BuildContext context, {bool listen = true}) {

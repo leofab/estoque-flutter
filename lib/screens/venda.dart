@@ -142,6 +142,7 @@ class _VendaState extends State<Venda> {
                             unidade: widget.produto.unidade,
                             quantidade: quantidade,
                             vendas: widget.produto.vendas,
+                            data: widget.produto.data,
                           );
                           provider.venderProduto(produtoVendido);
                           result(widget.produto).then((_) {

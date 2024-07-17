@@ -49,6 +49,7 @@ class ProdutoSql {
   int quantidade;
   String unidade;
   int vendas;
+  String data;
 
   ProdutoSql({
     required this.tipo,
@@ -58,6 +59,7 @@ class ProdutoSql {
     required this.quantidade,
     required this.unidade,
     this.vendas = 0,
+    required this.data,
   });
 
   Map<String, Object?> toMap() {
@@ -69,6 +71,7 @@ class ProdutoSql {
       'quantidade': quantidade,
       'unidade': unidade,
       'vendas': vendas,
+      'data': data,
     };
   }
 
@@ -81,11 +84,12 @@ class ProdutoSql {
       quantidade: map['quantidade'],
       unidade: map['unidade'],
       vendas: map['vendas'],
+      data: map['data'],
     );
   }
 
   @override
   String toString() {
-    return 'Produto{tipo: $tipo, nome: $nome, valorCompraTotal: $valorCompraTotal, preco: $preco, quantidade: $quantidade, unidade: $unidade, vendas: $vendas}';
+    return 'Produto{tipo: $tipo, nome: $nome, valorCompraTotal: $valorCompraTotal, preco: $preco, quantidade: $quantidade, unidade: $unidade, vendas: $vendas, data: $data}';
   }
 }

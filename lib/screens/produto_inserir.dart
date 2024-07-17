@@ -207,6 +207,7 @@ class _ProdutoInserirState extends State<ProdutoInserir> {
                         preco: double.parse(myControllerPreco.text),
                         quantidade: int.parse(myControllerQuantidade.text),
                         unidade: myControllerUnidade.text,
+                        data: DateTime.now().toString(),
                       );
                       result(produto).then((_) {
                         setState(() {

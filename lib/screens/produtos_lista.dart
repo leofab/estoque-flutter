@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_application_helder/main.dart';
 import 'package:flutter_application_helder/providers/produtos_provider.dart';
 
@@ -28,7 +29,7 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
   void initState() {
     super.initState();
     // Schedule compareData to run after the widget is built
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
       if (_isInit) {
         compareData();
         _isInit = false;
@@ -53,7 +54,9 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
 
   @override
   void didPopNext() {
-    compareData();
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      compareData();
+    });
   }
 
   Future<void> compareData() async {
@@ -66,61 +69,55 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
       sqlProdutos = results[0];
       firebaseProdutos = results[1];
       produtosVendidos = results[2];
-      compareLists(firebaseProdutos, sqlProdutos);
-      setState(() {});
+      await compareLists(firebaseProdutos, sqlProdutos);
+      print('SQL Products: $sqlProdutos');
+      print('Firebase Products: $firebaseProdutos');
+      print('Sold Products: $produtosVendidos');
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {});
+        }
+      });
     } catch (e) {
       print(e);
     }
   }
 
-  List<ProdutoItem> compareLists(
-      List<Produto> firebaseProdutos, List<Produto> sqlProdutos) {
-    List<Produto> onlyInFirebase = firebaseProdutos
-        .where((produto) => !sqlProdutos.any((p) => p.id == produto.id))
-        .toList();
-    List<Produto> onlyInSql = sqlProdutos
-        .where((produto) => !firebaseProdutos.any((p) => p.id == produto.id))
-        .toList();
-    if (onlyInSql.length > onlyInFirebase.length) {
-      produtosFiltro = onlyInSql
-          .map((produto) => ProdutoItem(
-                produto: produto,
-                id: produto.id.toString(),
-                tipo: produto.nome,
-                nome: produto.nome,
-                preco: produto.preco.toString(),
-                quantidade: produto.quantidade.toString(),
-              ))
-          .toList();
-      produtosProdutos = onlyInSql;
-      return produtosFiltro;
-    } else if (onlyInSql.length < onlyInFirebase.length) {
-      produtosFiltro = onlyInFirebase
-          .map((produto) => ProdutoItem(
-                produto: produto,
-                id: produto.id.toString(),
-                tipo: produto.nome,
-                nome: produto.nome,
-                preco: produto.preco.toString(),
-                quantidade: produto.quantidade.toString(),
-              ))
-          .toList();
-      produtosProdutos = onlyInFirebase;
-      return produtosFiltro;
-    } else {
-      produtosFiltro = sqlProdutos
-          .map((produto) => ProdutoItem(
-                produto: produto,
-                id: produto.id.toString(),
-                tipo: produto.nome,
-                nome: produto.nome,
-                preco: produto.preco.toString(),
-                quantidade: produto.quantidade.toString(),
-              ))
-          .toList();
+  Future<void> compareLists(
+      List<Produto> firebaseProdutos, List<Produto> sqlProdutos) async {
+    if (sqlProdutos.length > firebaseProdutos.length) {
+      for (var produto in sqlProdutos) {
+        if (!firebaseProdutos.contains(produto)) {
+          await HttpHelper().postHttp(produto);
+        } else {
+          await HttpHelper().deleteHttp(produto);
+          await HttpHelper().postHttp(produto);
+        }
+      }
       produtosProdutos = sqlProdutos;
-      return produtosFiltro;
+    } else if (sqlProdutos.length < firebaseProdutos.length) {
+      for (var produto in firebaseProdutos) {
+        if (!sqlProdutos.contains(produto)) {
+          await DatabaseHelper().insertDb(produto.toMap());
+        } else {
+          await DatabaseHelper().alterProductByID(produto.toMap());
+        }
+      }
+      produtosProdutos = firebaseProdutos;
+    } else {
+      produtosProdutos = sqlProdutos;
     }
+
+    produtosFiltro = produtosProdutos
+        .map((produto) => ProdutoItem(
+              produto: produto,
+              id: produto.id.toString(),
+              tipo: produto.nome,
+              nome: produto.nome,
+              preco: produto.preco.toString(),
+              quantidade: produto.quantidade.toString(),
+            ))
+        .toList();
   }
 
   Future<void> _navigateToProdutoInserir(BuildContext context) async {
@@ -140,9 +137,21 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
     provider.produtosItems = produtosFiltro;
     provider.produtosVendidos = produtosVendidos;
     provider.produtos = produtosProdutos;
-    List<ProdutoItem> produtos = provider.produtosItems
-        .where((produto) => produto.produto.quantidade > 0)
-        .toList();
+    List<ProdutoItem> produtos = provider.isFiltered
+        ? provider.produtos.map((produto) {
+            return ProdutoItem(
+              produto: produto,
+              id: produto.id.toString(),
+              tipo: produto.nome,
+              nome: produto.nome,
+              preco: produto.preco.toString(),
+              quantidade: produto.quantidade.toString(),
+            );
+          }).toList()
+        : provider.produtosItems
+            .where((produto) => produto.produto.quantidade > 0)
+            .toList();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -202,8 +211,9 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
             ),
             ListTile(
               title: const Text("Vendas / Caixa"),
-              onTap: () {
+              onTap: () async {
                 if (ModalRoute.of(context)!.settings.name != "/vendas") {
+                  await compareData();
                   Navigator.of(context).pushReplacementNamed("/vendas");
                 } else {
                   Navigator.pop(context);
@@ -249,7 +259,7 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
       persistentFooterButtons: [
         ElevatedButton(
           onPressed: () {
-            // provider.limparFiltro();
+            provider.clearFilter();
           },
           child: const Text("Limpar Filtros"),
         ),
