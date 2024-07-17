@@ -17,30 +17,36 @@ class ProdutosProvider extends ChangeNotifier {
     return [..._produtosItems];
   }
 
-  set produtosItems(List<ProdutoItem> produtosItems) {
-    _produtosItems = produtosItems;
-    notifyListeners();
-  }
-
-  set produtosVendidos(List<Produto> produtosVendidos) {
-    _produtosVendidos = produtosVendidos;
-    notifyListeners();
-  }
-
   List<Produto> get produtos => _isFiltered ? _produtosFiltro : _produtos;
 
   List<Produto> get produtosVendidos {
     return [..._produtosVendidos];
   }
 
+  void _scheduleNotifyListeners() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
+  }
+
+  set produtosItems(List<ProdutoItem> produtosItems) {
+    _produtosItems = produtosItems;
+    _scheduleNotifyListeners();
+  }
+
+  set produtosVendidos(List<Produto> produtosVendidos) {
+    _produtosVendidos = produtosVendidos;
+    _scheduleNotifyListeners();
+  }
+
   set produtos(List<Produto> produtos) {
     _produtos = produtos;
-    notifyListeners();
+    _scheduleNotifyListeners();
   }
 
   set produtosFiltro(List<Produto> produtosFiltro) {
     _produtosFiltro = produtosFiltro;
-    notifyListeners();
+    _scheduleNotifyListeners();
   }
 
   double valorCompraTotal() {
@@ -61,13 +67,13 @@ class ProdutosProvider extends ChangeNotifier {
     _produtosFiltro =
         _produtos.where((produto) => produto.tipo.contains(tipo)).toList();
     _isFiltered = true;
-    notifyListeners();
+    _scheduleNotifyListeners();
     return produtos;
   }
 
   void clearFilter() {
     _isFiltered = false;
-    notifyListeners();
+    _scheduleNotifyListeners();
   }
 
   void venderProduto(Produto produto) {
@@ -81,13 +87,13 @@ class ProdutosProvider extends ChangeNotifier {
     if (produtoVendido != produto) {
       produtoVendido.quantidade += produto.quantidade;
     }
-    notifyListeners();
+    _scheduleNotifyListeners();
   }
 
   void alterarProduto(Produto produto) {
     final index = _produtos.indexWhere((p) => p.id == produto.id);
     _produtos[index] = produto;
-    notifyListeners();
+    _scheduleNotifyListeners();
   }
 
   static ProdutosProvider of(BuildContext context, {bool listen = true}) {
