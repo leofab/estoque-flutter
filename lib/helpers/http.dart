@@ -50,7 +50,7 @@ class HttpHelper {
     String jsonString = '';
     var url = Uri.parse('${dotenv.env['url']}/produtos.json');
     try {
-      final response = await http.get(url);
+      final response = await _retryHttpGet(url);
       if (response.statusCode == 200) {
         jsonString = response.body;
         List<dynamic> preData = json.decode(jsonString).values.toList();
@@ -82,5 +82,28 @@ class HttpHelper {
       print('ClientException with SocketException: $e');
       return [];
     }
+  }
+
+  Future<http.Response> _retryHttpGet(Uri url,
+      {int retries = 3, Duration delay = const Duration(seconds: 2)}) async {
+    int attempt = 0;
+    while (attempt < retries) {
+      try {
+        final response = await http.get(url);
+        if (response.statusCode == 200) {
+          return response;
+        } else {
+          throw http.ClientException(
+              'Failed with status code: ${response.statusCode}');
+        }
+      } catch (e) {
+        attempt++;
+        if (attempt >= retries) {
+          rethrow;
+        }
+        await Future.delayed(delay);
+      }
+    }
+    throw http.ClientException('Failed after $retries attempts');
   }
 }

@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_application_helder/main.dart';
 import 'package:flutter_application_helder/providers/produtos_provider.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../models/produto.dart';
 import 'produto_item.dart';
@@ -9,6 +12,7 @@ import 'produto_inserir.dart';
 import 'filtrar.dart';
 import '../helpers/database.dart';
 import '../helpers/http.dart';
+import '../service/connectivity_service.dart';
 
 class ProdutosLista extends StatefulWidget {
   const ProdutosLista({super.key});
@@ -24,6 +28,8 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
   List<Produto> firebaseProdutos = [];
   List<Produto> sqlProdutos = [];
   bool _isInit = true;
+  StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
+  final ConnectivityService _connectivityService = ConnectivityService();
 
   @override
   void initState() {
@@ -33,6 +39,15 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
       if (_isInit) {
         compareData();
         _isInit = false;
+      }
+    });
+
+    _connectivitySubscription =
+        _connectivityService.connectivityStream.listen((result) {
+      if (result.contains(ConnectivityResult.wifi) ||
+          result.contains(ConnectivityResult.mobile) ||
+          result.contains(ConnectivityResult.ethernet)) {
+        compareData();
       }
     });
   }
@@ -48,6 +63,7 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
 
   @override
   void dispose() {
+    _connectivitySubscription?.cancel();
     routeObserver.unsubscribe(this);
     super.dispose();
   }
@@ -66,11 +82,17 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
     } catch (e) {
       print('Error fetching from local database: $e');
     }
-    try {
-      final resultFirebase = await HttpHelper().fetchFromFirebase();
-      firebaseProdutos = resultFirebase;
-    } catch (e) {
-      print('Error fetching from Firebase: $e');
+    bool isConnected = await _connectivityService.isConnected;
+
+    if (isConnected) {
+      try {
+        final resultFirebase = await HttpHelper().fetchFromFirebase();
+        firebaseProdutos = resultFirebase;
+      } catch (e) {
+        print('Error fetching from Firebase: $e');
+        firebaseProdutos = [];
+      }
+    } else {
       firebaseProdutos = [];
     }
     try {
