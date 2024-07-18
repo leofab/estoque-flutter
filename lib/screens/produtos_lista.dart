@@ -227,7 +227,7 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
         ),
       ),
       floatingActionButton: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 80, horizontal: 0),
+        padding: const EdgeInsets.fromLTRB(0, 120, 0, 0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
