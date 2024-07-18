@@ -97,6 +97,7 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
       for (var produto in sqlProdutos) {
         if (!firebaseProdutos.contains(produto)) {
           try {
+            await HttpHelper().deleteHttp(produto);
             await HttpHelper().postHttp(produto);
           } catch (e) {
             print('Error posting to Firebase: $e');
