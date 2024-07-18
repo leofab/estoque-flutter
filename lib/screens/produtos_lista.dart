@@ -61,14 +61,25 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
 
   Future<void> compareData() async {
     try {
-      final results = await Future.wait([
-        DatabaseHelper().fetchFromDB(),
-        HttpHelper().fetchFromFirebase(),
-        DatabaseHelper().fetchAllProductsWithSales(),
-      ]);
-      sqlProdutos = results[0];
-      firebaseProdutos = results[1];
-      produtosVendidos = results[2];
+      final resultDb = await DatabaseHelper().fetchFromDB();
+      sqlProdutos = resultDb;
+    } catch (e) {
+      print('Error fetching from local database: $e');
+    }
+    try {
+      final resultFirebase = await HttpHelper().fetchFromFirebase();
+      firebaseProdutos = resultFirebase;
+    } catch (e) {
+      print('Error fetching from Firebase: $e');
+      firebaseProdutos = [];
+    }
+    try {
+      final resultSales = await DatabaseHelper().fetchAllProductsWithSales();
+      produtosVendidos = resultSales;
+    } catch (e) {
+      print('Error fetching sold products: $e');
+    }
+    try {
       await compareLists(firebaseProdutos, sqlProdutos);
       SchedulerBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
@@ -76,7 +87,7 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
         }
       });
     } catch (e) {
-      print(e);
+      print('Error comparing lists: $e');
     }
   }
 
@@ -85,19 +96,35 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
     if (sqlProdutos.length > firebaseProdutos.length) {
       for (var produto in sqlProdutos) {
         if (!firebaseProdutos.contains(produto)) {
-          await HttpHelper().postHttp(produto);
+          try {
+            await HttpHelper().postHttp(produto);
+          } catch (e) {
+            print('Error posting to Firebase: $e');
+          }
         } else {
-          await HttpHelper().deleteHttp(produto);
-          await HttpHelper().postHttp(produto);
+          try {
+            await HttpHelper().deleteHttp(produto);
+            await HttpHelper().postHttp(produto);
+          } catch (e) {
+            print('Error updating Firebase: $e');
+          }
         }
       }
       produtosProdutos = sqlProdutos;
     } else if (sqlProdutos.length < firebaseProdutos.length) {
       for (var produto in firebaseProdutos) {
         if (!sqlProdutos.contains(produto)) {
-          await DatabaseHelper().insertDb(produto.toMap());
+          try {
+            await DatabaseHelper().insertDb(produto.toMap());
+          } catch (e) {
+            print('Error inserting to local DB: $e');
+          }
         } else {
-          await DatabaseHelper().alterProductByID(produto.toMap());
+          try {
+            await DatabaseHelper().alterProductByID(produto.toMap());
+          } catch (e) {
+            print('Error updating local DB: $e');
+          }
         }
       }
       produtosProdutos = firebaseProdutos;
@@ -168,7 +195,7 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
         backgroundColor: Colors.black45,
       ),
       body: GridView.builder(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(25),
         itemCount: produtos.length,
         itemBuilder: (context, index) {
           return produtos[index];

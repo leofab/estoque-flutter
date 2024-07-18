@@ -58,30 +58,62 @@ class HttpHelper {
   Future<List<Produto>> fetchFromFirebase() async {
     String jsonString = '';
     var url = Uri.parse('${dotenv.env['url']}/produtos.json');
-    return http.get(url).then((response) {
-      jsonString = response.body;
-      List<dynamic> preData = json.decode(jsonString).values.toList();
-      final data = <String, dynamic>{};
-      for (var value in preData) {
-        data.addEntries(value.entries as Iterable<MapEntry<String, dynamic>>);
-      }
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        jsonString = response.body;
+        List<dynamic> preData = json.decode(jsonString).values.toList();
+        final data = <String, dynamic>{};
+        for (var value in preData) {
+          data.addEntries(value.entries as Iterable<MapEntry<String, dynamic>>);
+        }
 
-      final dataMap = data as Map<String, dynamic>;
-      List<Produto> produtos = [];
-      dataMap.values.forEach((value) {
-        produtos.add(Produto(
-          id: value['id'],
-          tipo: value['tipo'],
-          nome: value['nome'],
-          valorCompraTotal: value['valorCompraTotal'],
-          preco: value['preco'],
-          quantidade: value['quantidade'],
-          unidade: value['unidade'],
-          vendas: value['vendas'],
-          data: DateTime.parse(value['data']).toString(),
-        ));
-      });
-      return produtos;
-    });
+        final dataMap = data as Map<String, dynamic>;
+        List<Produto> produtos = [];
+        dataMap.values.forEach((value) {
+          produtos.add(Produto(
+            id: value['id'],
+            tipo: value['tipo'],
+            nome: value['nome'],
+            valorCompraTotal: value['valorCompraTotal'],
+            preco: value['preco'],
+            quantidade: value['quantidade'],
+            unidade: value['unidade'],
+            vendas: value['vendas'],
+            data: DateTime.parse(value['data']).toString(),
+          ));
+        });
+        return produtos;
+      } else {
+        throw Exception('Failed to load data from Firebase');
+      }
+    } catch (e) {
+      print('ClientException with SocketException: $e');
+      return [];
+    }
+    // return http.get(url).then((response) {
+    //   jsonString = response.body;
+    //   List<dynamic> preData = json.decode(jsonString).values.toList();
+    //   final data = <String, dynamic>{};
+    //   for (var value in preData) {
+    //     data.addEntries(value.entries as Iterable<MapEntry<String, dynamic>>);
+    //   }
+
+    //   final dataMap = data as Map<String, dynamic>;
+    //   List<Produto> produtos = [];
+    //   dataMap.values.forEach((value) {
+    //     produtos.add(Produto(
+    //       id: value['id'],
+    //       tipo: value['tipo'],
+    //       nome: value['nome'],
+    //       valorCompraTotal: value['valorCompraTotal'],
+    //       preco: value['preco'],
+    //       quantidade: value['quantidade'],
+    //       unidade: value['unidade'],
+    //       vendas: value['vendas'],
+    //       data: DateTime.parse(value['data']).toString(),
+    //     ));
+    //   });
+    // });
   }
 }

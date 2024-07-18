@@ -37,9 +37,9 @@ class ProdutoItem extends StatelessWidget {
     return InkWell(
       onTap: () => selecionarProduto(context),
       splashColor: Theme.of(context).colorScheme.secondary,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(18),
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
@@ -49,7 +49,7 @@ class ProdutoItem extends StatelessWidget {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(18),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,14 +57,14 @@ class ProdutoItem extends StatelessWidget {
             Text(
               nome,
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 22,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
               quantidade,
               style: const TextStyle(
-                fontSize: 14,
+                fontSize: 18,
               ),
             ),
           ],
