@@ -164,41 +164,31 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
       }
       produtosProdutos = firebaseProdutos;
     }
+
+    Set<int> firebaseIds = firebaseProdutos.map((prod) => prod.id).toSet();
+    Set<int> sqlIds = sqlProdutos.map((prod) => prod.id).toSet();
+
+    var productsToAddToFirebase =
+        sqlProdutos.where((prod) => !firebaseIds.contains(prod.id)).toList();
+
+    var productsToAddToLocal =
+        firebaseProdutos.where((prod) => !sqlIds.contains(prod.id)).toList();
+
     if (sqlProdutos.length > firebaseProdutos.length) {
-      for (var produtos in sqlProdutos) {
-        for (var prod in firebaseProdutos) {
-          if (prod.id == produtos.id && prod.vendas != produtos.vendas ||
-              prod.quantidade != produtos.quantidade) {
-            try {
-              await HttpHelper().deleteHttp(produtos);
-              await HttpHelper().postHttp(produtos);
-            } catch (e) {
-              print('Error updating Firebase: $e');
-            }
-          } else if (prod.id != produtos.id) {
-            try {
-              await HttpHelper().postHttp(produtos);
-            } catch (e) {
-              print('Error posting to Firebase: $e');
-            }
-          }
+      for (var produto in productsToAddToFirebase) {
+        try {
+          await HttpHelper().postHttp(produto);
+        } catch (e) {
+          print('Error posting to Firebase: $e');
         }
       }
       produtosProdutos = sqlProdutos;
     } else if (sqlProdutos.length < firebaseProdutos.length) {
-      for (var produto in firebaseProdutos) {
-        if (!sqlProdutos.contains(produto)) {
-          try {
-            await DatabaseHelper().insertDb(produto.toMap());
-          } catch (e) {
-            print('Error inserting to local DB: $e');
-          }
-        } else {
-          try {
-            await DatabaseHelper().alterProductByID(produto.toMap());
-          } catch (e) {
-            print('Error updating local DB: $e');
-          }
+      for (var produto in productsToAddToLocal) {
+        try {
+          await DatabaseHelper().insertDb(produto.toMap());
+        } catch (e) {
+          print('Error inserting to local DB: $e');
         }
       }
       produtosProdutos = firebaseProdutos;
