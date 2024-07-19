@@ -13,6 +13,7 @@ import 'filtrar.dart';
 import '../helpers/database.dart';
 import '../helpers/http.dart';
 import '../service/connectivity_service.dart';
+import '../debauncer.dart';
 
 class ProdutosLista extends StatefulWidget {
   const ProdutosLista({super.key});
@@ -30,6 +31,8 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
   bool _isInit = true;
   StreamSubscription<List<ConnectivityResult>>? _connectivitySubscription;
   final ConnectivityService _connectivityService = ConnectivityService();
+  final Debouncer _debouncer = Debouncer(milliseconds: 200);
+  bool isLoadingState = false;
 
   @override
   void initState() {
@@ -37,17 +40,16 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
     // Schedule compareData to run after the widget is built
     SchedulerBinding.instance.addPostFrameCallback((_) {
       if (_isInit) {
-        compareData();
+        // compareData();
+        _connectivitySubscription =
+            _connectivityService.connectivityStream.listen((result) {
+          if (result.contains(ConnectivityResult.wifi) ||
+              result.contains(ConnectivityResult.mobile) ||
+              result.contains(ConnectivityResult.ethernet)) {
+            _debouncer.run(compareData);
+          }
+        });
         _isInit = false;
-      }
-    });
-
-    _connectivitySubscription =
-        _connectivityService.connectivityStream.listen((result) {
-      if (result.contains(ConnectivityResult.wifi) ||
-          result.contains(ConnectivityResult.mobile) ||
-          result.contains(ConnectivityResult.ethernet)) {
-        compareData();
       }
     });
   }
@@ -76,15 +78,19 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
   }
 
   Future<void> compareData() async {
+    isLoadingState = true;
     try {
       final resultDb = await DatabaseHelper().fetchFromDB();
       sqlProdutos = resultDb;
     } catch (e) {
       print('Error fetching from local database: $e');
     }
-    bool isConnected = await _connectivityService.isConnected;
+    List<ConnectivityResult> isConnected =
+        await _connectivityService.isConnected;
 
-    if (isConnected) {
+    if (isConnected.contains(ConnectivityResult.wifi) ||
+        isConnected.contains(ConnectivityResult.mobile) ||
+        isConnected.contains(ConnectivityResult.ethernet)) {
       try {
         final resultFirebase = await HttpHelper().fetchFromFirebase();
         firebaseProdutos = resultFirebase;
@@ -111,25 +117,70 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
     } catch (e) {
       print('Error comparing lists: $e');
     }
+    isLoadingState = false;
   }
 
   Future<void> compareLists(
       List<Produto> firebaseProdutos, List<Produto> sqlProdutos) async {
-    if (sqlProdutos.length > firebaseProdutos.length) {
+    produtosProdutos = [];
+
+    List<ConnectivityResult> isConnected =
+        await _connectivityService.isConnected;
+
+    bool hasInternet = isConnected.contains(ConnectivityResult.wifi) ||
+        isConnected.contains(ConnectivityResult.mobile) ||
+        isConnected.contains(ConnectivityResult.ethernet);
+
+    if (hasInternet) {
+      try {
+        final resultFirebase = await HttpHelper().fetchFromFirebase();
+        firebaseProdutos = resultFirebase;
+      } catch (e) {
+        print('Error fetching from Firebase: $e');
+        firebaseProdutos = [];
+      }
+    } else {
+      firebaseProdutos = [];
+    }
+
+    if (hasInternet && firebaseProdutos.isEmpty) {
       for (var produto in sqlProdutos) {
-        if (!firebaseProdutos.contains(produto)) {
-          try {
-            await HttpHelper().deleteHttp(produto);
-            await HttpHelper().postHttp(produto);
-          } catch (e) {
-            print('Error posting to Firebase: $e');
-          }
-        } else {
-          try {
-            await HttpHelper().deleteHttp(produto);
-            await HttpHelper().postHttp(produto);
-          } catch (e) {
-            print('Error updating Firebase: $e');
+        try {
+          await HttpHelper().postHttp(produto);
+        } catch (e) {
+          print('Error posting to Firebase: $e');
+        }
+      }
+      produtosProdutos = sqlProdutos;
+    }
+
+    if (hasInternet && sqlProdutos.isEmpty) {
+      for (var produto in firebaseProdutos) {
+        try {
+          await DatabaseHelper().insertDb(produto.toMap());
+        } catch (e) {
+          print('Error inserting to local DB: $e');
+        }
+      }
+      produtosProdutos = firebaseProdutos;
+    }
+    if (sqlProdutos.length > firebaseProdutos.length) {
+      for (var produtos in sqlProdutos) {
+        for (var prod in firebaseProdutos) {
+          if (prod.id == produtos.id && prod.vendas != produtos.vendas ||
+              prod.quantidade != produtos.quantidade) {
+            try {
+              await HttpHelper().deleteHttp(produtos);
+              await HttpHelper().postHttp(produtos);
+            } catch (e) {
+              print('Error updating Firebase: $e');
+            }
+          } else if (prod.id != produtos.id) {
+            try {
+              await HttpHelper().postHttp(produtos);
+            } catch (e) {
+              print('Error posting to Firebase: $e');
+            }
           }
         }
       }
@@ -199,118 +250,140 @@ class _ProdutosListaState extends State<ProdutosLista> with RouteAware {
             .where((produto) => produto.produto.quantidade > 0)
             .toList();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          "Produtos",
-          style: TextStyle(color: Colors.amber[100]),
-        ),
-        leading: Builder(
-          builder: (context) {
-            return IconButton(
-              icon: const Icon(Icons.menu),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-            );
-          },
-        ),
-        backgroundColor: Colors.black45,
-      ),
-      body: GridView.builder(
-        padding: const EdgeInsets.all(25),
-        itemCount: produtos.length,
-        itemBuilder: (context, index) {
-          return produtos[index];
-        },
-        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-          maxCrossAxisExtent: 200,
-          childAspectRatio: 3 / 2,
-          crossAxisSpacing: 20,
-          mainAxisSpacing: 20,
-        ),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.amber,
+    return isLoadingState
+        ? Scaffold(
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 180),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'Carregando produtos',
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+                    const SizedBox(height: 20),
+                    const CircularProgressIndicator(
+                      semanticsLabel: 'Circular progress indicator',
+                      backgroundColor: Colors.black,
+                      color: Color(0xFFFFD54F),
+                    ),
+                  ]),
+            ),
+          )
+        : Scaffold(
+            appBar: AppBar(
+              title: Text(
+                "Produtos",
+                style: TextStyle(color: Colors.amber[100]),
               ),
-              child: Text(
-                "Estoque App",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ListTile(
-              title: const Text("Produtos"),
-              onTap: () {
-                if (ModalRoute.of(context)!.settings.name != "/produtos") {
-                  Navigator.of(context).pushReplacementNamed("/produtos");
-                } else {
-                  Navigator.pop(context);
-                }
-              },
-            ),
-            ListTile(
-              title: const Text("Vendas / Caixa"),
-              onTap: () async {
-                if (ModalRoute.of(context)!.settings.name != "/vendas") {
-                  await compareData();
-                  Navigator.of(context).pushReplacementNamed("/vendas");
-                } else {
-                  Navigator.pop(context);
-                }
-              },
-            ),
-            ListTile(
-              title: const Text("Sair"),
-              onTap: () {
-                Navigator.pushReplacementNamed(context, '/login');
-              },
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 120, 0, 0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            FloatingActionButton.extended(
-              label: const Text("Filtrar"),
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+              leading: Builder(
                 builder: (context) {
-                  return const Filtrar();
+                  return IconButton(
+                    icon: const Icon(Icons.menu),
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                  );
                 },
-              )),
-              backgroundColor: Colors.amber[300],
-              splashColor: Colors.amber[100],
-              icon: const Icon(Icons.filter_alt),
-              heroTag: null,
+              ),
+              backgroundColor: Colors.black45,
             ),
-            FloatingActionButton(
-              onPressed: () => _navigateToProdutoInserir(context),
-              backgroundColor: Colors.amber[300],
-              splashColor: Colors.amber[100],
-              heroTag: null,
-              child: const Icon(Icons.add),
+            body: GridView.builder(
+              padding: const EdgeInsets.all(25),
+              itemCount: produtos.length,
+              itemBuilder: (context, index) {
+                return produtos[index];
+              },
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
+                childAspectRatio: 3 / 2,
+                crossAxisSpacing: 20,
+                mainAxisSpacing: 20,
+              ),
             ),
-          ],
-        ),
-      ),
-      persistentFooterButtons: [
-        ElevatedButton(
-          onPressed: () {
-            provider.clearFilter();
-          },
-          child: const Text("Limpar Filtros"),
-        ),
-      ],
-    );
+            drawer: Drawer(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: [
+                  const DrawerHeader(
+                    decoration: BoxDecoration(
+                      color: Colors.amber,
+                    ),
+                    child: Text(
+                      "Estoque App",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 24,
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    title: const Text("Produtos"),
+                    onTap: () {
+                      if (ModalRoute.of(context)!.settings.name !=
+                          "/produtos") {
+                        Navigator.of(context).pushReplacementNamed("/produtos");
+                      } else {
+                        Navigator.pop(context);
+                      }
+                    },
+                  ),
+                  ListTile(
+                    title: const Text("Vendas / Caixa"),
+                    onTap: () async {
+                      if (ModalRoute.of(context)!.settings.name != "/vendas") {
+                        await compareData();
+                        Navigator.of(context).pushReplacementNamed("/vendas");
+                      } else {
+                        Navigator.pop(context);
+                      }
+                    },
+                  ),
+                  ListTile(
+                    title: const Text("Sair"),
+                    onTap: () {
+                      Navigator.pushReplacementNamed(context, '/login');
+                    },
+                  ),
+                ],
+              ),
+            ),
+            floatingActionButton: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 120, 0, 0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  FloatingActionButton.extended(
+                    label: const Text("Filtrar"),
+                    onPressed: () =>
+                        Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) {
+                        return const Filtrar();
+                      },
+                    )),
+                    backgroundColor: Colors.amber[300],
+                    splashColor: Colors.amber[100],
+                    icon: const Icon(Icons.filter_alt),
+                    heroTag: null,
+                  ),
+                  FloatingActionButton(
+                    onPressed: () => _navigateToProdutoInserir(context),
+                    backgroundColor: Colors.amber[300],
+                    splashColor: Colors.amber[100],
+                    heroTag: null,
+                    child: const Icon(Icons.add),
+                  ),
+                ],
+              ),
+            ),
+            persistentFooterButtons: [
+              ElevatedButton(
+                onPressed: () {
+                  DatabaseHelper().deleteAllProdutosFromDB();
+                },
+                child: const Text("Limpar Filtros"),
+              ),
+            ],
+          );
   }
 }

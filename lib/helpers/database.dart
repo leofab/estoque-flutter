@@ -35,31 +35,12 @@ class DatabaseHelper {
     await db.update('produtos', data, where: 'id = ?', whereArgs: [data['id']]);
   }
 
-  Future<void> alterProductByQuantidade(Map<String, dynamic> data) async {
+  Future<void> deleteAllProdutosFromDB() async {
     final io.Directory documentsDirectory =
         await getApplicationDocumentsDirectory();
     final String dbPath = path.join(documentsDirectory.path, 'produtos.db');
     final db = await databaseFactory.openDatabase(dbPath);
-    await db.update('produtos', data,
-        where: 'quantidade = ?', whereArgs: [data['quantidade']]);
-  }
-
-  Future<void> alterProductByName(Map<String, dynamic> data) async {
-    final io.Directory documentsDirectory =
-        await getApplicationDocumentsDirectory();
-    final String dbPath = path.join(documentsDirectory.path, 'produtos.db');
-    final db = await databaseFactory.openDatabase(dbPath);
-    await db
-        .update('produtos', data, where: 'nome = ?', whereArgs: [data['nome']]);
-  }
-
-  Future<void> alterProductByUnidade(Map<String, dynamic> data) async {
-    final io.Directory documentsDirectory =
-        await getApplicationDocumentsDirectory();
-    final String dbPath = path.join(documentsDirectory.path, 'produtos.db');
-    final db = await databaseFactory.openDatabase(dbPath);
-    await db.update('produtos', data,
-        where: 'unidade = ?', whereArgs: [data['unidade']]);
+    await db.delete('produtos');
   }
 
   Future<List<Produto>> fetchFromDB() async {
